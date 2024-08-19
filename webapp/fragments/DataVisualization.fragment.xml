@@ -1,0 +1,102 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:suite="sap.suite.ui.commons"
+>
+    <Dialog
+        id="iddialogVisuals"
+        title="Data Visualization:"
+        draggable="true"
+        resizable="false"
+        stretch="false"
+        contentWidth="70%"
+        contentHeight="70%"
+    >
+        <Title
+            id="idTitleBarForChart"
+            text="PARKING LOT MANAGEMENT:"
+            class="DatavisualPARKINGLOT"
+        />
+        <Button
+            id="idBtnRefreshDataVisualizationDialog"
+            icon="sap-icon://synchronize"
+            press="onRefreshDataVisualizationChart"
+            type="Transparent"
+            class="DatavisualPARKINGLOT123"
+        />
+        <endButton>
+            <Button
+                id="idbtnCloseDataVisualsGraph"
+                text="Close"
+                press="onClosePiechartDialog"
+            />
+        </endButton>
+        <VBox
+            id="vbox"
+            fitContainer="true"
+        >
+            <suite:ChartContainer id="chartContainer">
+                <suite:content>
+                    <suite:ChartContainerContent id="chartContainerContent">
+                        <suite:content>
+                            <viz:VizFrame
+                                id="idbarchart"
+                                width="auto"
+                                uiConfig="{applicationSet:'fiori'}"
+                                vizType="column"
+                                vizProperties="{
+                                    plotArea: {dataLabel: {visible: true}},
+                                    title: {text:'Parking Lot Status:'},
+                                    colorPalette: ['#57DA2A', '#EA2365', '#090979'],
+                                    legend: {visible: true,title: 'Status'}
+                                    }"
+                                selectData="myOnClickHandler"
+                                renderComplete="handleRenderComplete"
+                            >
+                                <viz:dataset>
+                                    <viz.data:FlattenedDataset
+                                        id="idFlattenedDataset"
+                                        data="{ParkingLotModel>/Items}"
+                                    >
+                                        <viz.data:dimensions>
+                                            <viz.data:DimensionDefinition
+                                                id="idDimensionDefinition"
+                                                name="Status"
+                                                value="{ParkingLotModel>Status}"
+                                            />
+                                        </viz.data:dimensions>
+                                        <viz.data:measures>
+                                            <viz.data:MeasureDefinition
+                                                id="idMeasureDefinition"
+                                                name="Count"
+                                                value="{ParkingLotModel>Count}"
+                                            />
+                                        </viz.data:measures>
+                                    </viz.data:FlattenedDataset>
+                                </viz:dataset>
+
+                                <viz:feeds>
+                                    <viz.feeds:FeedItem
+                                        id="FeedItem89875"
+                                        uid="valueAxis"
+                                        type="Measure"
+                                        values="Count"
+                                    />
+                                    <viz.feeds:FeedItem
+                                        id="idFeedItem1"
+                                        uid="categoryAxis"
+                                        type="Dimension"
+                                        values="Status"
+                                    />
+                                </viz:feeds>
+                            </viz:VizFrame>
+                        </suite:content>
+                    </suite:ChartContainerContent>
+                </suite:content>
+            </suite:ChartContainer>
+        </VBox>
+    </Dialog>
+</core:FragmentDefinition>

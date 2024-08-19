@@ -1,0 +1,102 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns="sap.m"
+>
+    <Dialog
+        id="iddialog123"
+        resizable="false"
+        draggable="true"
+        contentWidth="30%"
+        title="Reserved Slot will Allocated to Vehicle:"
+    >
+        <beginButton>
+            <Button
+                id="idReserveSlotAssignConfirm"
+                text="Assign"
+                press="onReserveSlotConfirmAssignBtnPress"
+                class="AssignBtnFromReservedslotsFragment"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                id="idCancelreserveslotConfirmButton"
+                text="Cancel"
+                press="onCloseReserveSlotConfirm"
+                class="CancelBtnFromReservedslotsFragment123"
+            />
+        </endButton>
+        <content>
+            <form:SimpleForm
+                id="idReserveSlotForm"
+                editable="true"
+                layout="ResponsiveGridLayout"
+                labelSpanXL="3"
+                labelSpanL="3"
+                labelSpanM="3"
+                labelSpanS="12"
+                adjustLabelSpan="false"
+                emptySpanXL="4"
+                emptySpanL="4"
+                emptySpanM="4"
+                emptySpanS="0"
+                columnsXL="1"
+                columnsL="1"
+                columnsM="1"
+                singleContainerFullSize="false"
+            >
+                <Label
+                    id="idLableReservedSlot"
+                    text="Reserved Slot"
+                />
+                <Input
+                    id="idReservedSlotInput"
+                    editable="false"
+                    value="{oConfirmReservedSlotModel>/Slotnumber}"
+                />
+                <Label
+                    id="idLableSlotNum14305"
+                    text="Service Type"
+                />
+                <Input
+                    id="idServiceTypeForVendor"
+                    editable="false"
+                    value="{oConfirmReservedSlotModel>/Servicetype}"
+                />
+                <Label
+                    id="idLableDriverName14301"
+                    text="Driver Name"
+                />
+                <Input
+                    id="idDriverNameInput"
+                    value="{oConfirmReservedSlotModel>/Drivername}"
+                />
+                <Label
+                    id="idLablePhoneNumber14302"
+                    text="Driver Number"
+                />
+                <Input
+                    id="idMobileNumberInput"
+                    value="{oConfirmReservedSlotModel>/Drivernumber}"
+                />
+
+                <Label
+                    id="idLableVehicleType14303"
+                    text="Vehicle Type"
+                />
+                <Input
+                    id="idVehTypeInput"
+                    value="{oConfirmReservedSlotModel>/Vehicletype}"
+                />
+                <Label
+                    id="idLableVehicleNumber14304"
+                    text="Vehicle Number"
+                />
+                <Input
+                    id="idVehNumberInput"
+                    value="{oConfirmReservedSlotModel>/Vehiclenumber}"
+                />
+            </form:SimpleForm>
+        </content>
+    </Dialog>
+</core:FragmentDefinition>

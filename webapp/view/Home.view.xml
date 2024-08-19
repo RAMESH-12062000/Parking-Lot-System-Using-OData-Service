@@ -1,0 +1,1346 @@
+<mvc:View
+    controllerName="com.app.parkinglotodatasys.controller.Home"
+    xmlns:smarttable="sap.ui.comp.smarttable"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:layout="sap.ui.layout"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:m="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:tnt="sap.tnt"
+    xmlns:ndc="sap.ndc"
+    displayBlock="true"
+    height="100%"
+>
+    <tnt:ToolPage id="toolPage">
+        <tnt:header>
+            <tnt:ToolHeader id="IDGenToolHeader1">
+                <Image
+                    id="IDGenImage1"
+                    height="1.5rem"
+                    class="sapUiSmallMarginBegin"
+                    src="https://i.postimg.cc/3wBkmqjQ/Artihcus-logo-1-transformed.png"
+                />
+                <Button
+                    id="sideNavigationToggleButton"
+                    icon="sap-icon://expand-all"
+                    type="Transparent"
+                    press=".onSideNavButtonPress"
+                >
+                    <layoutData>
+                        <OverflowToolbarLayoutData
+                            id="IDGenOverflowToolbarLayoutData1"
+                            priority="NeverOverflow"
+                        />
+                    </layoutData>
+                </Button>
+                <ToolbarSpacer
+                    id="IDGenToolbarSpacer1"
+                    width="20px"
+                />
+
+                <!-- Supervisor Information Section in Header -->
+                <m:HBox
+                    id="IDGenHBox1"
+                    fitContainer="true"
+                    alignItems="Center"
+                >
+                    <m:Avatar
+                        id="IDGenAvatar1"
+                        displaySize="XS"
+                        src="./Images/img(3).jpeg"
+                        class="sapUiSmallMarginEnd"
+                    />
+                    <m:VBox id="IDGenVBox1">
+                        <layout:HorizontalLayout id="_IDGenHorizontalLayout1">
+                            <m:Text
+                                id="IDGenText1"
+                                text="{supervisor>/name}"
+                                class="HeaderName"
+                            />
+                        </layout:HorizontalLayout>
+                        <layout:HorizontalLayout id="_IDGenHorizontalLayout2">
+                            <m:Link
+                                id="IDGenLink1"
+                                text="{supervisor>/phone}"
+                            />
+                        </layout:HorizontalLayout>
+                        <!-- <layout:HorizontalLayout>
+                            <m:Text text="{supervisor>/position}" />
+                        </layout:HorizontalLayout> -->
+                    </m:VBox>
+                    <!-- <m:VBox>                       
+                        <layout:HorizontalLayout>
+                            <m:Label text="Email:" />
+                            <m:Link text="{supervisor>/contact}" />
+                        </layout:HorizontalLayout>
+                    </m:VBox> -->
+                </m:HBox>
+
+                <ToolbarSpacer id="IDGenToolbarSpacer2" />
+                <ndc:BarcodeScannerButton
+                    id="idQRCodeScannerBtn"
+                    scanSuccess="onScanSuccess"
+                    scanFail="onScanError"
+                    inputLiveUpdate="onScanLiveupdate"
+                    dialogTitle="Enter Assigned Vehicle Number:"
+                />
+                <!-- <m:Button
+                    id="idQRCodeScannerBtn"
+                    text="Scanner"
+                    press="onQRCodeScannerPress"
+                    icon="sap-icon://qr-code"
+                /> -->
+                <Button
+                    id="idReturnedBooksBtn"
+                    icon="sap-icon://bell"
+                    tooltip="Notifications"
+                    press="onNotificationPress"
+                >
+                    <customData>
+                        <BadgeCustomData
+                            id="idBadge"
+                            class="badge"
+                            value="{/ZEWM_T_RESERVSSet/$count}"
+                            visible="true"
+                        />
+                    </customData>
+                </Button>
+                <Button
+                    id="IDGenButton1"
+                    type="Transparent"
+                    tooltip="Data Visualization"
+                    icon="sap-icon://bar-chart"
+                    press="onGeographicBtnPress"
+                    class="BarChartBtn"
+                />
+                <!-- <Button
+                    id="IDGenButton2"
+                    icon="sap-icon://log"
+                    type="Transparent"
+                    press="onLogoutBtnPress"
+                /> -->
+            </tnt:ToolHeader>
+        </tnt:header>
+        <tnt:subHeader>
+            <tnt:ToolHeader id="idSubToolHeader">
+                <m:Title
+                    id="idTextSubTitleonToolBar"
+                    text="PARKING LOT MANAGEMENT"
+                    class="SubTitleOnToolBar"
+                />
+            </tnt:ToolHeader>
+        </tnt:subHeader>
+
+        <!-- LeftSide Pannel Section -->
+        <tnt:sideContent>
+            <tnt:SideNavigation
+                id="IDGenSideNavigation1"
+                expanded="true"
+                itemSelect=".onItemSelect"
+                class="SidePanelContent"
+            >
+                <tnt:NavigationList id="idnavigation">
+                    <tnt:NavigationListItem
+                        id="idGenSlotAssignMent"
+                        key="root1"
+                        text="Slot Assignment:"
+                        class="LeftSidePanelText"
+                        icon="sap-icon://activity-assigned-to-goal"
+                    />
+                    <tnt:NavigationListItem
+                        id="idGenAllSlotsTable"
+                        key="root2"
+                        text="All Slots:"
+                        icon="sap-icon://dimension"
+                    />
+                    <tnt:NavigationListItem
+                        id="idGenAllocatedSlotsTable"
+                        key="root3"
+                        text="Allocated Slots:"
+                        icon="sap-icon://shipping-status"
+                    />
+                    <tnt:NavigationListItem
+                        id="idGenReservationsTable"
+                        key="root4"
+                        text="Reservations:"
+                        icon="sap-icon://cart-2"
+                    />
+                    <tnt:NavigationListItem
+                        id="idGenReservedSlotsTable"
+                        key="root5"
+                        text="Reserved Slots:"
+                        icon="sap-icon://bus-public-transport"
+                    />
+                    <tnt:NavigationListItem
+                        id="idGenHistoryTable"
+                        key="root6"
+                        text="History:"
+                        icon="sap-icon://customer-history"
+                    />
+                </tnt:NavigationList>
+                <!-- <tnt:fixedItem>
+					<tnt:NavigationList id="_IDGenNavigationList2" items="{path: '/fixedNavigation'}">
+						<tnt:NavigationListItem id="_IDGenNavigationListItem3" text="{title}" icon="{icon}" />
+					</tnt:NavigationList>
+				</tnt:fixedItem> -->
+            </tnt:SideNavigation>
+        </tnt:sideContent>
+
+        <!-- RightSide Pannel 1st Assign a slot... -->
+        <tnt:mainContents>
+            <NavContainer
+                id="pageContainer"
+                initialPage="page2"
+            >
+                <pages>
+                    <ScrollContainer
+                        id="root1"
+                        horizontal="false"
+                        vertical="true"
+                        height="100%"
+                        class="sapUiContentPadding1234"
+                    >
+                        <VBox
+                            id="IDGenVBox2"
+                            class="sapUiSmallMargin"
+                        >
+                            <form:SimpleForm
+                                id="SimpleFormToolbar"
+                                editable="true"
+                                layout="ResponsiveGridLayout"
+                                labelSpanXL="4"
+                                labelSpanL="3"
+                                labelSpanM="4"
+                                labelSpanS="12"
+                                adjustLabelSpan="false"
+                                emptySpanXL="0"
+                                emptySpanL="4"
+                                emptySpanM="0"
+                                emptySpanS="0"
+                                columnsXL="2"
+                                columnsL="1"
+                                columnsM="1"
+                                singleContainerFullSize="false"
+                                ariaLabelledBy="Title1"
+                            >
+                                <form:toolbar>
+                                    <Toolbar id="TB1">
+                                        <Title
+                                            id="Title1"
+                                            text="SLOT ASSIGNMENT:"
+                                        />
+                                        <ToolbarSpacer
+                                            id="IDGenToolbarSpacer3"
+                                        />
+                                        <Button
+                                            id="IDGenButton3"
+                                            icon="sap-icon://action-settings"
+                                            press="onPressSettingsBtn"
+                                        />
+                                    </Toolbar>
+                                </form:toolbar>
+                                <form:content>
+                                    <Toolbar
+                                        id="IDGenToolbar1"
+                                        ariaLabelledBy="Title2"
+                                    >
+                                        <Title
+                                            id="Title2"
+                                            text="Parking Slot Assign to Vehicle:"
+                                        />
+                                        <ToolbarSpacer
+                                            id="IDGenToolbarSpacer4"
+                                        />
+                                    </Toolbar>
+                                    <Label
+                                        id="IDGenLabel6"
+                                        text="Service Type"
+                                        required="true"
+                                    />
+                                    <m:ComboBox
+                                        id="idTypeOfDelivery"
+                                        placeholder="Please Selct Service Type from Dropdown.."
+                                        width="80%"
+                                        change="onServiceTypeChange"
+                                    >
+                                        <core:Item
+                                            id="_IDGenItem234"
+                                            key="InBound"
+                                            text="InBound"
+                                        />
+                                        <core:Item
+                                            id="_IDGenItem2344"
+                                            key="OutBound"
+                                            text="OutBound"
+                                        />
+                                    </m:ComboBox>
+                                    <Label
+                                        id="IDGenLabel1"
+                                        text="Slot Number"
+                                        required="true"
+                                    />
+                                    <m:ComboBox
+                                        id="idparkingLotSelect"
+                                        width="80%"
+                                        placeholder="Please Select a Slot from Dropdown.. "
+                                        class="SlotNumberBold"
+                                        items="{path: '/ZEWM_T_ALLSLOTSSet', filters: [{path: 'Status', operator: 'EQ', value1: 'Available'}]}"
+                                    >
+                                        <core:Item
+                                            id="IDGenItem3"
+                                            key="{Id}"
+                                            text="{Slotno}"
+                                        />
+                                    </m:ComboBox>
+                                    <Label
+                                        id="IDGenLabel2"
+                                        text="Driver Name"
+                                        required="true"
+                                    />
+                                    <Input
+                                        id="iddriverName"
+                                        width="80%"
+                                        placeholder="enter Driver name.."
+                                    />
+                                    <Label
+                                        id="IDGenLabel3"
+                                        text="Driver Number"
+                                        required="true"
+                                    />
+                                    <Input
+                                        id="iddriverNumber"
+                                        width="80%"
+                                        placeholder="enter Driver phone number.."
+                                    />
+                                    <Label
+                                        id="IDGenLabel4"
+                                        text="Vehicle Number"
+                                        required="true"
+                                    />
+                                    <Input
+                                        id="idvehicleNumber"
+                                        width="80%"
+                                        placeholder="enter Vehicle Number.."
+                                    />
+                                    <Label
+                                        id="IDGenLabel5"
+                                        text="Vehicle Type"
+                                        required="true"
+                                    />
+                                    <Input
+                                        id="idvehicleType"
+                                        placeholder="enter Vehicle Type.."
+                                    />
+                                    <HBox
+                                        id="IDGenHBox2"
+                                        justifyContent="End"
+                                    >
+                                        <Button
+                                            id="IDGenButton5"
+                                            text="Assign"
+                                            press="onAssignSlotPress"
+                                            class="AssignClearSpace"
+                                        />
+                                        <Button
+                                            id="IDGenButton6"
+                                            text="Clear"
+                                            press="onClearSlotDetailsPress"
+                                            class="ClearBtnFromAssigning"
+                                        />
+                                    </HBox>
+                                </form:content>
+                            </form:SimpleForm>
+                        </VBox>
+                    </ScrollContainer>
+
+                    <!-- RightSide Pannel 2nd All Slots... -->
+                    <ScrollContainer
+                        id="root2"
+                        horizontal="false"
+                        vertical="true"
+                        height="100%"
+                        width="auto"
+                        class="sapUiContentPadding"
+                    >
+                        <m:VBox id="idVBoxallslots">
+                            <form:SimpleForm
+                                id="secondSimpleFormToolbar"
+                                editable="true"
+                                layout="ResponsiveGridLayout"
+                                labelSpanXL="4"
+                                labelSpanL="3"
+                                labelSpanM="4"
+                                labelSpanS="12"
+                                adjustLabelSpan="false"
+                                emptySpanXL="0"
+                                emptySpanL="4"
+                                emptySpanM="0"
+                                emptySpanS="0"
+                                columnsXL="2"
+                                columnsL="1"
+                                columnsM="1"
+                                singleContainerFullSize="false"
+                                ariaLabelledBy="Title1"
+                            >
+                                <form:toolbar>
+                                    <Toolbar id="TB2">
+                                        <Title
+                                            id="Title1455"
+                                            text="All SLOTS:"
+                                        />
+                                        <ToolbarSpacer
+                                            id="IDGenToolbarSpacer345"
+                                        />
+                                        <m:Button
+                                            id="idBtnFilter"
+                                            tooltip="Filter by Status"
+                                            icon="sap-icon://filter"
+                                            press="onFilterButtonPress"
+                                        />
+                                        <m:Button
+                                            id="idBtnRefresh"
+                                            tooltip="Refresh"
+                                            icon="sap-icon://synchronize"
+                                            press="onRefreshBtnPress"
+                                        />
+                                        <m:Button
+                                            id="idButtonSortingAllslots"
+                                            icon="sap-icon://sort"
+                                            press="onSortingAllSlotsTable"
+                                            tooltip="Sort"
+                                        />
+                                        <m:Button
+                                            id="idBtnAdminLogin"
+                                            tooltip="Add a New Slot"
+                                            icon="sap-icon://add"
+                                            press="onAddNewSlotPress"
+                                        />
+                                    </Toolbar>
+                                </form:toolbar>
+                                <form:content>
+                                    <Toolbar
+                                        id="IDGenToolbar2"
+                                        ariaLabelledBy="Title2"
+                                    >
+                                        <Title
+                                            id="Title3"
+                                            text="All Slots from the Parking Space:"
+                                        />
+                                        <m:ToolbarSpacer
+                                            id="idToolbarAllSlots"
+                                        />
+                                        <m:ComboBox
+                                            id="idComboAllslots"
+                                            placeholder="Filter by Status.."
+                                            selectionChange="onFilterStatusChange"
+                                            visible="false"
+                                        >
+                                            <core:Item
+                                                id="idCoreAvaible"
+                                                key="Available"
+                                                text="Available"
+                                            />
+                                            <core:Item
+                                                id="idCoreOccupied"
+                                                key="Occupied"
+                                                text="Occupied"
+                                            />
+                                            <core:Item
+                                                id="idCoreReserved"
+                                                key="Reserved"
+                                                text="Reserved"
+                                            />
+                                            <core:Item
+                                                id="idCoreInBound"
+                                                key="InBound"
+                                                text="InBound"
+                                            />
+                                            <core:Item
+                                                id="idCoreOutBound"
+                                                key="OutBound"
+                                                text="OutBound"
+                                            />
+                                        </m:ComboBox>
+                                    </Toolbar>
+                                    <Table
+                                        id="allSlotsTable"
+                                        width="auto"
+                                        alternateRowColors="true"
+                                        items="{/ZEWM_T_ALLSLOTSSet}"
+                                    >
+                                        <columns>
+                                            <Column id="IDGenColumn1">
+                                                <Text
+                                                    id="IDGenText5"
+                                                    text="Slot Number:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn2">
+                                                <Text
+                                                    id="IDGenText6"
+                                                    text="Service Type:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn3">
+                                                <Text
+                                                    id="IDGenText7"
+                                                    text="Status: (Available/Occupeid)"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                        </columns>
+                                        <items>
+                                            <ColumnListItem
+                                                id="IDGenColumnListItem1"
+                                                class="AlternateRowColorAllslots"
+                                            >
+                                                <cells>
+                                                    <Text
+                                                        id="IDGenText8"
+                                                        text="{Slotno}"
+                                                        class="SlotNumberBold"
+                                                    />
+                                                    <Text
+                                                        id="IDGenText9"
+                                                        text="{Servicetype}"
+                                                    />
+
+                                                    <ObjectStatus
+                                                        id="IDGenText11"
+                                                        text="{Status}"
+                                                        class="StatusBold"
+                                                        state="{path: 'Status', formatter: '.statusColorFormatter'}"
+                                                    />
+                                                </cells>
+                                            </ColumnListItem>
+                                        </items>
+                                    </Table>
+                                </form:content>
+                            </form:SimpleForm>
+                        </m:VBox>
+                    </ScrollContainer>
+
+                    <!-- RightSide Pannel 3rd Assigned slots... -->
+                    <ScrollContainer
+                        id="root3"
+                        horizontal="false"
+                        vertical="true"
+                        height="100%"
+                        class="sapUiContentPadding"
+                    >
+                        <m:VBox id="idVBoxallocatedslots">
+                            <form:SimpleForm
+                                id="thirdSimpleFormToolbar"
+                                editable="true"
+                                layout="ResponsiveGridLayout"
+                                labelSpanXL="4"
+                                labelSpanL="3"
+                                labelSpanM="4"
+                                labelSpanS="12"
+                                adjustLabelSpan="false"
+                                emptySpanXL="0"
+                                emptySpanL="4"
+                                emptySpanM="0"
+                                emptySpanS="0"
+                                columnsXL="2"
+                                columnsL="1"
+                                columnsM="1"
+                                singleContainerFullSize="false"
+                                ariaLabelledBy="Title1"
+                            >
+                                <form:toolbar>
+                                    <Toolbar id="TB3">
+                                        <Title
+                                            id="TitleAllocated"
+                                            text="ASSIGNED SLOTS:"
+                                        />
+                                        <m:ToolbarSpacer id="idtoolSearch133" />
+                                        <m:Button
+                                            id="idBtnRefreshAllocated"
+                                            tooltip="Refresh"
+                                            icon="sap-icon://synchronize"
+                                            press="onRefresAllocated"
+                                        />
+                                        <m:Button
+                                            id="idSortBtnAllocatedSlots"
+                                            icon="sap-icon://sort"
+                                            press="onSortBtnAllocatedSlots"
+                                        />
+                                        <m:SearchField
+                                            id="idSearchFieldAllocated"
+                                            liveChange="onLiveSearchAllocatedPress"
+                                            placeholder="Search Anything..."
+                                            width="20%"
+                                        />
+                                    </Toolbar>
+                                </form:toolbar>
+                                <form:content>
+                                    <Toolbar
+                                        id="IDGenToolbarallocated2"
+                                        ariaLabelledBy="Title2"
+                                    >
+                                        <Title
+                                            id="Title4"
+                                            text="Assigned Slots from the Parking Space:"
+                                        />
+                                        <ToolbarSpacer
+                                            id="IDGenToolbarSpacerallocated"
+                                        />
+                                        <Button
+                                            id="editButton"
+                                            text="Edit"
+                                            type="Transparent"
+                                            press="onEdit"
+                                        />
+                                        <Button
+                                            id="saveButton"
+                                            text="Save"
+                                            type="Transparent"
+                                            press="onSave"
+                                            class="SaveBtnFromAllocatedSlots"
+                                            visible="false"
+                                        />
+                                        <Button
+                                            id="cancelButton"
+                                            text="Cancel"
+                                            type="Transparent"
+                                            class="CancelBtnFromAllocatedSlots"
+                                            press="onCancel"
+                                            visible="false"
+                                        />
+                                    </Toolbar>
+                                    <Table
+                                        id="AllocatedSlotsTable"
+                                        width="auto"
+                                        items="{/ZEWM_T_ALDSLOTSSet}"
+                                        mode="SingleSelectLeft"
+                                        alternateRowColors="true"
+                                    >
+                                        <columns>
+                                            <Column id="Allocatedcol1">
+                                                <Text
+                                                    id="IDGenAllocatedText1"
+                                                    text="Slot Number:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="Allocatedcol7">
+                                                <Text
+                                                    id="IDGenAllocatedText7"
+                                                    text="Vehicle Type:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="Allocatedcol2">
+                                                <Text
+                                                    id="IDGenAllocatedTextt2"
+                                                    text="Vehicle Number:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="Allocatedcol3">
+                                                <Text
+                                                    id="IDGenAllocatedText3"
+                                                    text="Driver Number:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="Allocatedcol4">
+                                                <Text
+                                                    id="IDGenAllocatedText4"
+                                                    text="Driver Name:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="Allocatedcol8">
+                                                <Text
+                                                    id="IDGenAllocatedText8"
+                                                    text="Service Type:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="Allocatedcol5">
+                                                <Text
+                                                    id="IDGenAllocatedText5"
+                                                    text="In Time:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDAllocated6">
+                                                <Text
+                                                    id="IDGenAllocatedText6"
+                                                    text="Un Assign:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                        </columns>
+                                        <items>
+                                            <ColumnListItem
+                                                id="IDGenAllocatedColListItems"
+                                                class="AlternateRowColor"
+                                            >
+                                                <cells>
+                                                    <VBox id="idVboxSelectslot">
+                                                        <Text
+                                                            id="IDGenText01"
+                                                            text="{Slotnumber}"
+                                                            class="SlotNumberBold"
+                                                            visible="true"
+                                                        />
+                                                        <ComboBox
+                                                            id="idSelectSlotfromAvailable"
+                                                            visible="false"
+                                                            placeholder="Select Slot"
+                                                            class="SlotNumberBold"
+                                                        />
+                                                    </VBox>
+                                                    <Text
+                                                        id="IDGenText07"
+                                                        text="{Vehicletype}"
+                                                    />
+                                                    <m:VBox
+                                                        id="idVBoxVehicleNumber"
+                                                    >
+                                                        <Text
+                                                            id="IDGenText02"
+                                                            visible="true"
+                                                            text="{Vehiclenumber}"
+                                                        />
+                                                        <m:Input
+                                                            id="idInputVehicle"
+                                                            value="{Vehiclenumber}"
+                                                            visible="false"
+                                                        />
+                                                    </m:VBox>
+                                                    <m:VBox
+                                                        id="idVBoxDriverNumber"
+                                                    >
+                                                        <Text
+                                                            id="IDGenText03"
+                                                            text="{Drivernumber}"
+                                                        />
+                                                        <m:Input
+                                                            id="idInputDriverNumber"
+                                                            value="{Drivernumber}"
+                                                            visible="false"
+                                                        />
+                                                    </m:VBox>
+                                                    <m:VBox
+                                                        id="idVBoxDriverName"
+                                                    >
+                                                        <Text
+                                                            id="IDGenText04"
+                                                            text="{Drivername}"
+                                                        />
+                                                        <m:Input
+                                                            id="idInputDriverName"
+                                                            value="{Drivername}"
+                                                            visible="false"
+                                                        />
+                                                    </m:VBox>
+                                                    <Text
+                                                        id="IDGenText08"
+                                                        text="{ServiceType}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenText05"
+                                                        text="{Intime}"
+                                                    />
+                                                    <Button
+                                                        id="idClearUnAssignButton"
+                                                        icon="sap-icon://journey-depart"
+                                                        tooltip="Un Assign"
+                                                        type="Transparent"
+                                                        class="UnAssignBtn"
+                                                        press="onUnAssignPress"
+                                                    />
+                                                    <!-- <ComboBox
+                                                        id="idSlotNumberComboBox"
+                                                        items="{path: '/AllSlots',filters: [{ path: 'status', operator: 'EQ', value1: 'Available' }]}"
+                                                        visible="false"
+                                                    >
+                                                        <core:Item
+                                                            id="idcoreitemselected"
+                                                            key="{slotNumber}"
+                                                            text="{slotNumber}"
+                                                        />
+                                                    </ComboBox> -->
+                                                </cells>
+                                            </ColumnListItem>
+                                        </items>
+                                    </Table>
+                                </form:content>
+                            </form:SimpleForm>
+                        </m:VBox>
+                    </ScrollContainer>
+
+                    <!-- RightSide Pannel 4th Reservations Table... -->
+                    <ScrollContainer
+                        id="root4"
+                        horizontal="false"
+                        vertical="true"
+                        height="100%"
+                        class="sapUiContentPadding"
+                    >
+                        <m:VBox id="idVBoxAvailslots">
+                            <form:SimpleForm
+                                id="fourthSimpleFormToolbar"
+                                editable="true"
+                                layout="ResponsiveGridLayout"
+                                labelSpanXL="4"
+                                labelSpanL="3"
+                                labelSpanM="4"
+                                labelSpanS="12"
+                                adjustLabelSpan="false"
+                                emptySpanXL="0"
+                                emptySpanL="4"
+                                emptySpanM="0"
+                                emptySpanS="0"
+                                columnsXL="2"
+                                columnsL="1"
+                                columnsM="1"
+                                singleContainerFullSize="false"
+                                ariaLabelledBy="Title1"
+                            >
+                                <form:toolbar>
+                                    <Toolbar id="TB4">
+                                        <Title
+                                            id="Title1455896"
+                                            text="RESERVATIONS:"
+                                        />
+                                        <ToolbarSpacer id="IDGenToolbar345" />
+                                        <m:Button
+                                            id="idRefrehshBtnReservations"
+                                            press="onRefreshReservations"
+                                            icon="sap-icon://synchronize"
+                                        />
+                                        <m:Button
+                                            id="idBtnReject"
+                                            text="Reject"
+                                            press="onRejectConfirmSlotPress"
+                                            class="reservationrejectbtn"
+                                        />
+                                        <m:Button
+                                            id="idBtnRequest"
+                                            text="Confirm"
+                                            press="onConfirmRequestSlotPress"
+                                            class="confirmReservationBtn"
+                                        />
+                                    </Toolbar>
+                                </form:toolbar>
+                                <form:content>
+                                    <Toolbar
+                                        id="IDGenToolbar4"
+                                        ariaLabelledBy="Title2"
+                                    >
+                                        <Title
+                                            id="Title5"
+                                            text="Request for a Slot from Vendors:"
+                                        />
+                                        <m:ToolbarSpacer
+                                            id="idtoolBarReservations"
+                                        />
+                                        <m:SearchField
+                                            id="idSearchFieldFromReservations"
+                                            liveChange="onLiveSearchReservationsPress"
+                                            placeholder="Search Anything..."
+                                            width="25%"
+                                        />
+                                    </Toolbar>
+                                    <Table
+                                        id="idReservationsTable"
+                                        width="auto"
+                                        items="{/ZEWM_T_RESERVSSet}"
+                                        mode="SingleSelectLeft"
+                                        alternateRowColors="true"
+                                    >
+                                        <columns>
+                                            <Column id="IDGenColumn001">
+                                                <Text
+                                                    id="IDGenText001"
+                                                    text="Vendor Name:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn002">
+                                                <Text
+                                                    id="IDGenText002"
+                                                    text="Vendor Number:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn003">
+                                                <Text
+                                                    id="IDGenText003"
+                                                    text="Driver Name:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn004">
+                                                <Text
+                                                    id="IDGenText004"
+                                                    text="Driver Number:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn005">
+                                                <Text
+                                                    id="IDGenText005"
+                                                    text="Vehicle Type:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn006">
+                                                <Text
+                                                    id="IDGenText006"
+                                                    text="Vehicle Number:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn007">
+                                                <Text
+                                                    id="IDGenText007"
+                                                    text="Service Type:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn008">
+                                                <Text
+                                                    id="IDGenText008"
+                                                    text="Reserve Date:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                        </columns>
+                                        <items>
+                                            <ColumnListItem
+                                                id="IDGenAvailColumnListItem1"
+                                                class="AlternateRowColor"
+                                            >
+                                                <cells>
+                                                    <Text
+                                                        id="IDGenAvailText1"
+                                                        text="{Vendorname}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenAvailText2"
+                                                        text="{Vendornumber}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenAvailText3"
+                                                        text="{Drivername}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenAvailText4"
+                                                        text="{Drivernumber}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenAvailText5"
+                                                        text="{Vehicletype}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenAvailText6"
+                                                        text="{Vehiclenumber}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenAvailText7"
+                                                        text="{Servicetype}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenAvailText8"
+                                                        text="{Intime}"
+                                                    />
+                                                </cells>
+                                            </ColumnListItem>
+                                        </items>
+                                    </Table>
+                                </form:content>
+                            </form:SimpleForm>
+                        </m:VBox>
+                    </ScrollContainer>
+
+                    <!-- Reserved Slots for a Vendor....5th -->
+                    <ScrollContainer
+                        id="root5"
+                        horizontal="false"
+                        vertical="true"
+                        height="100%"
+                        class="sapUiContentPadding"
+                    >
+                        <m:VBox id="idVBoxReserveslots">
+                            <form:SimpleForm
+                                id="idfifthSimpleFormToolbar"
+                                editable="true"
+                                layout="ResponsiveGridLayout"
+                                labelSpanXL="4"
+                                labelSpanL="3"
+                                labelSpanM="4"
+                                labelSpanS="12"
+                                adjustLabelSpan="false"
+                                emptySpanXL="0"
+                                emptySpanL="4"
+                                emptySpanM="0"
+                                emptySpanS="0"
+                                columnsXL="2"
+                                columnsL="1"
+                                columnsM="1"
+                                singleContainerFullSize="false"
+                                ariaLabelledBy="Title1"
+                            >
+                                <form:toolbar>
+                                    <Toolbar id="TB5">
+                                        <Title
+                                            id="Title1489045"
+                                            text="RESERVED SLOTS FOR VENDORS:"
+                                        />
+                                        <ToolbarSpacer id="IDGenToolbar567" />
+                                        <m:Button
+                                            id="idBtnReServeAssignConfirm"
+                                            text="Assign"
+                                            class="AssignBtnfromReservedSlots"
+                                            press="onAssignConfirmReserveSlot"
+                                            tooltip="ReservedSlotConfirm"
+                                            icon="sap-icon://activity-assigned-to-goal"
+                                        />
+                                        <m:Button
+                                            id="idButtonSortingReservedSlots"
+                                            icon="sap-icon://sort"
+                                            press="onSortingReservedSlotsTable"
+                                            tooltip="Sort"
+                                        />
+                                    </Toolbar>
+                                </form:toolbar>
+                                <form:content>
+                                    <Toolbar
+                                        id="IDGenToolbar90"
+                                        ariaLabelledBy="Title2"
+                                    >
+                                        <Title
+                                            id="Title2345"
+                                            text="You declared a Slot for Vendor:"
+                                        />
+                                        <m:ToolbarSpacer
+                                            id="idToolBarReservesedSlots"
+                                        />
+                                        <m:SearchField
+                                            id="idSearchFieldFromReservedSlots"
+                                            liveChange="onLiveSearchReservedSlotsPress"
+                                            placeholder="Search Anything..."
+                                            width="25%"
+                                        />
+                                    </Toolbar>
+                                    <Table
+                                        id="idReservedslotsTable"
+                                        width="auto"
+                                        items="{/ZEWM_T_RSDSLOTSSet}"
+                                        mode="MultiSelect"
+                                        alternateRowColors="true"
+                                    >
+                                        <columns>
+                                            <Column id="IDGenColumn9000">
+                                                <Text
+                                                    id="IDGenText91"
+                                                    text="Vendor Name:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn9001">
+                                                <Text
+                                                    id="IDGenText92"
+                                                    text="Vendor Number:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn9002">
+                                                <Text
+                                                    id="IDGenText93"
+                                                    text="Driver Name:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn9003">
+                                                <Text
+                                                    id="IDGenText94"
+                                                    text="Driver Number:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn9004">
+                                                <Text
+                                                    id="IDGenText95"
+                                                    text="Reserved Slot:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn9005">
+                                                <Text
+                                                    id="IDGenText96"
+                                                    text="Service Type:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn9006">
+                                                <Text
+                                                    id="IDGenText97"
+                                                    text="Vehicle Number:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn9007">
+                                                <Text
+                                                    id="IDGenText98"
+                                                    text="Vehicle Type:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                        </columns>
+                                        <items>
+                                            <ColumnListItem
+                                                id="IDGenReserveColListItem1"
+                                                class="AlternateRowColor"
+                                            >
+                                                <cells>
+                                                    <Text
+                                                        id="IDGenReserveText1"
+                                                        text="{Vendorname}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenReserveText2"
+                                                        text="{Vendornumber}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenReserveText3"
+                                                        text="{Drivername}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenReserveText4"
+                                                        text="{Drivernumber}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenReserveText5"
+                                                        text="{Slotnumber}"
+                                                        class="SlotNumberBold"
+                                                    />
+                                                    <Text
+                                                        id="IDGenReserveText6"
+                                                        text="{Servicetype}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenReserveText7"
+                                                        text="{Vehiclenumber}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenReserveText8"
+                                                        text="{Vehicletype}"
+                                                    />
+                                                </cells>
+                                            </ColumnListItem>
+                                        </items>
+                                    </Table>
+                                </form:content>
+                            </form:SimpleForm>
+                        </m:VBox>
+                    </ScrollContainer>
+
+                    <!-- RightSide Pannel 6th History... -->
+                    <m:ScrollContainer
+                        id="root6"
+                        horizontal="false"
+                        vertical="true"
+                        height="100%"
+                        class="sapUiContentPadding"
+                    >
+                        <m:VBox id="idVBoxHistory">
+                            <form:SimpleForm
+                                id="fifthSimpleFormToolbar"
+                                editable="true"
+                                layout="ResponsiveGridLayout"
+                                labelSpanXL="4"
+                                labelSpanL="3"
+                                labelSpanM="4"
+                                labelSpanS="12"
+                                adjustLabelSpan="false"
+                                emptySpanXL="0"
+                                emptySpanL="4"
+                                emptySpanM="0"
+                                emptySpanS="0"
+                                columnsXL="2"
+                                columnsL="1"
+                                columnsM="1"
+                                singleContainerFullSize="false"
+                                ariaLabelledBy="Title1"
+                            >
+                                <form:toolbar>
+                                    <Toolbar id="TB6">
+                                        <Title
+                                            id="Title145589676"
+                                            text="TOATL HISTORY:"
+                                        />
+                                        <ToolbarSpacer id="IDGenToolbar34589" />
+                                        <!-- <m:Input
+                                            id="idInputSearch"
+                                            liveChange="onLiveSearchAnything"
+                                            width="30%"
+                                            placeholder="Search Anything..."
+                                        /> -->
+                                        <m:Button
+                                            id="idBtnRefershHistory"
+                                            tooltip="Refresh"
+                                            icon="sap-icon://synchronize"
+                                            press="onRefreshBtnTotalHistoryTable"
+                                        />
+                                        <m:Button
+                                            id="idButtonSortingHistory"
+                                            icon="sap-icon://sort"
+                                            press="onSortingHistoryTable"
+                                            tooltip="Sort"
+                                        />
+                                        <m:SearchField
+                                            id="idSearchField"
+                                            liveChange="onLiveSearchAnythingPress"
+                                            placeholder="Search Anything..."
+                                            width="25%"
+                                        />
+                                    </Toolbar>
+                                </form:toolbar>
+                                <form:content>
+                                    <Table
+                                        id="idHistoryTable"
+                                        width="auto"
+                                        items="{/ZEWM_T_HISTORYSet}"
+                                        alternateRowColors="true"
+                                    >
+                                        <columns>
+                                            <Column id="IDGenColumn0011">
+                                                <Text
+                                                    id="IDGenText0011"
+                                                    text="Slot Number:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn0022">
+                                                <Text
+                                                    id="IDGenText0022"
+                                                    text="Service Type:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn0088">
+                                                <Text
+                                                    id="IDGenText0088"
+                                                    text="Vehicle Type:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn0033">
+                                                <Text
+                                                    id="IDGenText0033"
+                                                    text="Vehicle Number:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn0044">
+                                                <Text
+                                                    id="IDGenText0044"
+                                                    text="Driver Number:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn0055">
+                                                <Text
+                                                    id="IDGenText0055"
+                                                    text="Driver Name:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn0066">
+                                                <Text
+                                                    id="IDGenText0066"
+                                                    text="In Time:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                            <Column id="IDGenColumn0077">
+                                                <Text
+                                                    id="IDGenText0077"
+                                                    text="Out Time:"
+                                                    class="HedingNameColor"
+                                                />
+                                            </Column>
+                                        </columns>
+                                        <items>
+                                            <ColumnListItem
+                                                id="IDGenHistoryColumnListItem1"
+                                                class="AlternateRowColor"
+                                            >
+                                                <cells>
+                                                    <Text
+                                                        id="IDGenHistoryText8"
+                                                        text="{Slotnumber}"
+                                                        class="SlotNumberBold"
+                                                    />
+                                                    <Text
+                                                        id="IDGenHistoryText9"
+                                                        text="{Servicetype}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenHistoryText10"
+                                                        text="{Vehicletype}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenHistoryText11"
+                                                        text="{Vehiclenumber}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenHistoryText12"
+                                                        text="{Drivernumber}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenHistoryText13"
+                                                        text="{Drivername}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenHistoryText14"
+                                                        text="{Intime}"
+                                                    />
+                                                    <Text
+                                                        id="IDGenHistoryText15"
+                                                        text="{Outtime}"
+                                                    />
+                                                    <!-- <Button
+                                                        id="idClearSlotButton"
+                                                        icon="sap-icon://delete"
+                                                        tooltip="Un Assign"
+                                                        type="Transparent"
+                                                        press="onClearUnAssignPress"
+                                                    /> -->
+                                                </cells>
+                                            </ColumnListItem>
+                                        </items>
+                                    </Table>
+                                </form:content>
+                            </form:SimpleForm>
+                        </m:VBox>
+                    </m:ScrollContainer>
+                    <ScrollContainer
+                        id="page2"
+                        horizontal="false"
+                        vertical="true"
+                        height="100%"
+                        class="sapUiContentPadding"
+                    >
+                        <m:Image
+                            id="IdImageright"
+                            src="https://i.postimg.cc/nrYwxY3w/image-Artihcus-1.jpg"
+                            width="100%"
+                            height="auto"
+                        />
+                    </ScrollContainer>
+                </pages>
+            </NavContainer>
+        </tnt:mainContents>
+    </tnt:ToolPage>
+</mvc:View>

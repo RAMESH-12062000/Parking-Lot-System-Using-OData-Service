@@ -1,0 +1,124 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns="sap.m"
+>
+    <Dialog
+        id="iddialogFromReservetions"
+        resizable="false"
+        draggable="true"
+        contentWidth="30%"
+        title="Confirmation to Reserve a Slot for Vendor:"
+    >
+        <beginButton>
+            <Button
+                id="_IDGenButton1"
+                text="Reserve"
+                press="onReserveSlotBtnPress"
+                class="ReserveBtnfromReservationFragment"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                id="_IDGenButton2"
+                text="Cancel"
+                press="onCloseReserveSlotDialog"
+                class="CacelBtnfromReservationFragment"
+            />
+        </endButton>
+        <content>
+            <form:SimpleForm
+                id="_IDGenSimpleForm1"
+                editable="true"
+                layout="ResponsiveGridLayout"
+                labelSpanXL="3"
+                labelSpanL="3"
+                labelSpanM="3"
+                labelSpanS="12"
+                adjustLabelSpan="false"
+                emptySpanXL="4"
+                emptySpanL="4"
+                emptySpanM="4"
+                emptySpanS="0"
+                columnsXL="1"
+                columnsL="1"
+                columnsM="1"
+                singleContainerFullSize="false"
+            >
+                <Label
+                    id="idLableName1"
+                    text="Vendor Name"
+                />
+                <Input
+                    id="idNewUserNameInput"
+                    value="{oConfirmRequestModel>/Vendorname}"
+                    editable="false"
+                />
+                <Label
+                    id="idLableNumber2"
+                    text="Vendor Number"
+                />
+                <Input
+                    id="idEmailInput"
+                    value="{oConfirmRequestModel>/Vendornumber}"
+                    editable="false"
+                />
+                <Label
+                    id="idLableDriverName3"
+                    text="Driver Name"
+                />
+                <Input
+                    id="idUserNameInput"
+                    value="{oConfirmRequestModel>/Drivername}"
+                    editable="false"
+                />
+                <Label
+                    id="idLablePhoneNumber4"
+                    text="Driver Number"
+                />
+                <Input
+                    id="idPhoneNumberInput"
+                    value="{oConfirmRequestModel>/Drivernumber}"
+                    editable="false"
+                />
+
+                <Label
+                    id="idLableVehicleType5"
+                    text="Vehicle Type"
+                />
+                <Input
+                    id="idCreatePasswordInput"
+                    value="{oConfirmRequestModel>/Vehicletype}"
+                    editable="false"
+                />
+                <Label
+                    id="idLableVehicleNumber6"
+                    text="Vehicle Number"
+                />
+                <Input
+                    id="idInputuserType"
+                    value="{oConfirmRequestModel>/Vehiclenumber}"
+                    editable="false"
+                />
+                <Label
+                    id="_IDGenLabel1"
+                    text="Service Type"
+                />
+                <Input
+                    id="idInputServiceType7"
+                    value="{oConfirmRequestModel>/Servicetype}"
+                    editable="false"
+                />
+                <Label
+                    id="idLableSlotNum8"
+                    text="Select Slot"
+                />
+                <ComboBox
+                    id="idselectSlotReserve"
+                    placeholder="Please Select Slot from Dropdown"
+                >
+                </ComboBox>
+            </form:SimpleForm>
+        </content>
+    </Dialog>
+</core:FragmentDefinition>
