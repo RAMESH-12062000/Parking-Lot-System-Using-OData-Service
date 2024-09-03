@@ -17,6 +17,7 @@ sap.ui.define([
                 //AllSlots Data Visuals...
                 this._setParkingLotModel();
 
+                //Supervisor Details...
                 var oSupervisorData = {
                     name: "Ramesh P",
                     position: "Parking Lot Allocator",
@@ -30,6 +31,164 @@ sap.ui.define([
 
             },
 
+            //Notification Badge Count...
+            onAfterRendering: function () {
+                this._updateNotificationCount();
+                this.onSlotcountAllSlotsTAble();
+                this.onSlotcountAllocatedSlotsTable();
+                this.onSlotcountReservationsTable();
+                this.onSlotcountReservedSlotsTable();
+                this.onSlotcountHistoryTable();
+
+                //Perticular Status Slots count...
+                this.onSlotcountAvailableSlots();
+                this.onSlotcountOccupiedSlots();
+                this.onSlotcountReservedSlots();
+            },
+            //Only Available slots Count...
+            onSlotcountAvailableSlots: function () {
+                var oModel = this.getView().getModel();
+                var that = this;
+
+                // Fetch all slots data
+                oModel.read("/ZEWM_T_ALLSLOTSSet", {
+                    success: function (oData) {
+                        // Filter available slots locally
+                        var availableSlots = oData.results.filter(slot => slot.Status === 'Available');
+                        var sCount = availableSlots.length;
+                        var sTitle = "Available: " + sCount;
+                        that.getView().byId("TitleAvailable").setText(sTitle);
+                    },
+                    error: function (oError) {
+                        console.error("Error fetching all slots data:", oError);
+                    }
+                });
+            },
+            //only Occupied Slots Count...
+            onSlotcountOccupiedSlots: function () {
+                var oModel = this.getView().getModel();
+                var that = this;
+
+                // Fetch all slots data
+                oModel.read("/ZEWM_T_ALLSLOTSSet", {
+                    success: function (oData) {
+                        // Filter available slots locally
+                        var occupiedSlots = oData.results.filter(slot => slot.Status === 'Occupied');
+                        var sCount = occupiedSlots.length;
+                        var sTitle = "Occupied: " + sCount;
+                        that.getView().byId("TitleOccupied").setText(sTitle);
+                    },
+                    error: function (oError) {
+                        console.error("Error fetching all slots data:", oError);
+                    }
+                });
+            },
+            //only Reserved Slots Count...
+            onSlotcountReservedSlots: function () {
+                var oModel = this.getView().getModel();
+                var that = this;
+
+                // Fetch all slots data
+                oModel.read("/ZEWM_T_ALLSLOTSSet", {
+                    success: function (oData) {
+                        // Filter available slots locally
+                        var reservedslots = oData.results.filter(slot => slot.Status === 'Reserved');
+                        var sCount = reservedslots.length;
+                        var sTitle = "Reserved: " + sCount;
+                        that.getView().byId("TitleReserved").setText(sTitle);
+                    },
+                    error: function (oError) {
+                        console.error("Error fetching all slots data:", oError);
+                    }
+                });
+            },
+
+            //Count for the AllSlots table...
+            onSlotcountAllSlotsTAble: function () {
+                var oModel = this.getView().getModel();
+                var that = this;
+
+                oModel.read("/ZEWM_T_ALLSLOTSSet/$count", {
+                    success: function (oData) {
+                        var sCount = oData.results ? oData.results.length : oData;
+                        var sTitle = "All SLOTS: " + sCount + "";
+                        that.getView().byId("Title1455").setText(sTitle);
+                    },
+                    error: function (oError) {
+                        console.error("Error fetching parking area count:", oError);
+                    }
+                });
+            },
+            //Records count in Allocated Slots...
+            onSlotcountAllocatedSlotsTable: function () {
+                var oModel = this.getView().getModel();
+                var that = this;
+
+                // Read the number of records from ZEWM_PARKINGAREASet
+                oModel.read("/ZEWM_T_ALDSLOTSSet/$count", {
+                    success: function (oData) {
+                        var sCount = oData.results ? oData.results.length : oData;
+                        var sTitle = "ASSIGNED SLOTS: " + sCount + "";
+                        that.getView().byId("TitleAllocated").setText(sTitle);
+                    },
+                    error: function (oError) {
+                        console.error("Error fetching parking area count:", oError);
+                    }
+                });
+            },
+            //Records count in Reservations Table...
+            onSlotcountReservationsTable: function () {
+                var oModel = this.getView().getModel();
+                var that = this;
+
+                // Read the number of records from ZEWM_PARKINGAREASet
+                oModel.read("/ZEWM_T_RESERVSSet/$count", {
+                    success: function (oData) {
+                        var sCount = oData.results ? oData.results.length : oData;
+                        var sTitle = "RESERVATIONS: " + sCount + "";
+                        that.getView().byId("Title1455896").setText(sTitle);
+                    },
+                    error: function (oError) {
+                        console.error("Error fetching parking area count:", oError);
+                    }
+                });
+            },
+            //Records count in Reserved Slots Table...
+            onSlotcountReservedSlotsTable: function () {
+                var oModel = this.getView().getModel();
+                var that = this;
+
+                // Read the number of records from ZEWM_PARKINGAREASet
+                oModel.read("/ZEWM_T_RSDSLOTSSet/$count", {
+                    success: function (oData) {
+                        var sCount = oData.results ? oData.results.length : oData;
+                        var sTitle = "RESERVED SLOTS FOR VENDOR: " + sCount + "";
+                        that.getView().byId("Title1489045").setText(sTitle);
+                    },
+                    error: function (oError) {
+                        console.error("Error fetching parking area count:", oError);
+                    }
+                });
+            },
+            //Records count in History Table...
+            onSlotcountHistoryTable: function () {
+                var oModel = this.getView().getModel();
+                var that = this;
+
+                // Read the number of records from ZEWM_PARKINGAREASet
+                oModel.read("/ZEWM_T_HISTORYSet/$count", {
+                    success: function (oData) {
+                        var sCount = oData.results ? oData.results.length : oData;
+                        var sTitle = "TOTAL HISTORY: " + sCount + "";
+                        that.getView().byId("Title145589676").setText(sTitle);
+                    },
+                    error: function (oError) {
+                        console.error("Error fetching parking area count:", oError);
+                    }
+                });
+            },
+
+            //For Left side Pannel...
             onItemSelect: function (oEvent) {
                 var oItem = oEvent.getParameter("item");
                 this.byId("pageContainer").to(this.getView().createId(oItem.getKey()));
@@ -102,6 +261,8 @@ sap.ui.define([
                     filters: aFilters
                 });
             },
+
+            //After Editing data juct click on Save Btn...
             onSave: async function () {
                 debugger
                 const oView = this.getView();
@@ -119,9 +280,16 @@ sap.ui.define([
                 const oComboBox = oVBox.getItems()[1];
                 const sNewSlotNumber = oComboBox.getSelectedKey();
 
-                if (!sNewSlotNumber) {
-                    sap.m.MessageToast.show("Please select a new slot number.");
-                    return;
+                const oContext = oSelectedItem.getBindingContext();
+                const oData = oContext.getObject();
+                const sOldSlotNumber = oData.Slotnumber;
+
+                // Skip slot number validation if the slot number has not been changed
+                if (sNewSlotNumber && sNewSlotNumber !== sOldSlotNumber) {
+                    if (!sNewSlotNumber) {
+                        sap.m.MessageToast.show("Please select a new slot number.");
+                        return;
+                    }
                 }
 
                 // Validate other fields
@@ -151,109 +319,121 @@ sap.ui.define([
 
                 // Name should contain at least 4 letters
                 if (sDriverName.length < 4) {
-                    aCells[3].getItems()[1].setValueState(sap.ui.core.ValueState.Error);
-                    aCells[3].getItems()[1].setValueStateText("Names should contain at least '4 Letters'.");
+                    aCells[4].getItems()[1].setValueState(sap.ui.core.ValueState.Error);
+                    aCells[4].getItems()[1].setValueStateText("Names should contain at least '4 Letters'.");
                     sap.m.MessageToast.show("Please enter a valid name, at least contains '4 Letters'.");
                     return;
                 } else {
-                    aCells[3].getItems()[1].setValueState(sap.ui.core.ValueState.None);
+                    aCells[4].getItems()[1].setValueState(sap.ui.core.ValueState.None);
                 }
 
-                const oContext = oSelectedItem.getBindingContext();
-                const oData = oContext.getObject();
-                const sOldSlotNumber = oData.slotNum.ID;
+                var FinalDate = new Date(); // Getting the Present date..
+                var options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+                var formattedDate = FinalDate.toLocaleString('en-US', options);
 
+                // Payload for AllocatedSlots update, preserving the old slot number if it hasn't changed
                 const oAllocatedSlotUpdate = {
-                    slotNum: { ID: null },
-                    vehicleNumber: sVehicleNumber,
-                    driverNumber: sDriverNumber,
-                    driverName: sDriverName,
-                    inTime: new Date().toISOString()
+                    AssignedslotId: oData.AssignedslotId,
+                    Slotnumber: sNewSlotNumber || sOldSlotNumber, // Use old slot number if no new slot is selected
+                    Vehicletype: oData.Vehicletype,
+                    Vehiclenumber: sVehicleNumber,
+                    Drivernumber: sDriverNumber,
+                    Drivername: sDriverName,
+                    ServiceType: oData.ServiceType,
+                    Intime: formattedDate
                 };
 
-                const oFilter = new sap.ui.model.Filter("slotNumber", sap.ui.model.FilterOperator.EQ, sNewSlotNumber);
-
                 try {
-                    // Fetch new slot data from AllSlots table to get the ID
-                    const oNewSlotData = await new Promise((resolve, reject) => {
-                        oModel.read("/AllSlots", {
-                            filters: [oFilter],
-                            success: function (oData) {
-                                if (oData.results && oData.results.length > 0) {
-                                    resolve(oData.results[0]);
-                                } else {
-                                    reject(new Error("No data found for the new slot number."));
-                                }
-                            },
-                            error: function (oError) {
-                                reject(oError);
-                            }
-                        });
-                    });
-
-                    // Update allocated slot with new details
-                    oAllocatedSlotUpdate.slotNum.ID = oNewSlotData.ID;
-                    const sAllocatedSlotPath = oContext.getPath();
-
+                    // Update the AllocatedSlots table
+                    const sPath = oContext.getPath();
                     await new Promise((resolve, reject) => {
-                        oModel.update(sAllocatedSlotPath, oAllocatedSlotUpdate, {
+                        oModel.update(sPath, oAllocatedSlotUpdate, {
                             success: resolve,
                             error: reject
                         });
                     });
 
-                    // Update old slot status to 'Available'
-                    await new Promise((resolve, reject) => {
-                        oModel.update(`/AllSlots(${sOldSlotNumber})`, { status: 'Available' }, {
-                            success: resolve,
-                            error: reject
+                    if (sNewSlotNumber && sNewSlotNumber !== sOldSlotNumber) {
+                        // If slot number is changed, update the AllSlots table
+                        // Fetch data for both old and new slots from AllSlots table
+                        const sAllSlotsFilter = `?$filter=Slotno eq '${sOldSlotNumber}' or Slotno eq '${sNewSlotNumber}'`;
+                        const oAllSlotsData = await new Promise((resolve, reject) => {
+                            oModel.read(`/ZEWM_T_ALLSLOTSSet${sAllSlotsFilter}`, {
+                                success: resolve,
+                                error: reject
+                            });
                         });
+
+                        // Find the relevant slots by their slot numbers
+                        const oOldSlotData = oAllSlotsData.results.find(slot => slot.Slotno === sOldSlotNumber);
+                        const oNewSlotData = oAllSlotsData.results.find(slot => slot.Slotno === sNewSlotNumber);
+
+                        // Update old slot status to 'Available'
+                        const sOldSlotUpdatePath = `/ZEWM_T_ALLSLOTSSet('${oOldSlotData.Id}')`;
+                        const oOldSlotUpdate = {
+                            Id: oOldSlotData.Id,
+                            Slotno: oOldSlotData.Slotno,
+                            Status: 'Available',
+                            Servicetype: oOldSlotData.Servicetype,
+                        };
+                        await new Promise((resolve, reject) => {
+                            oModel.update(sOldSlotUpdatePath, oOldSlotUpdate, {
+                                success: resolve,
+                                error: reject
+                            });
+                        });
+
+                        // Update new slot status to 'Occupied'
+                        const sNewSlotUpdatePath = `/ZEWM_T_ALLSLOTSSet('${oNewSlotData.Id}')`;
+                        const oNewSlotUpdate = {
+                            Id: oNewSlotData.Id,
+                            Slotno: oNewSlotData.Slotno,
+                            Status: 'Occupied',
+                            Servicetype: oNewSlotData.Servicetype,
+                        };
+                        await new Promise((resolve, reject) => {
+                            oModel.update(sNewSlotUpdatePath, oNewSlotUpdate, {
+                                success: resolve,
+                                error: reject
+                            });
+                        });
+                    }
+                    // // Send SMS to driver
+                    const driverPhoneFull = "+91" + sDriverNumber;
+
+                    // Twilio API credentials
+                    const accountSid = 'AC9418cec2d41b4131132454d424d9f90c';
+                    const authToken = '574590d23b9133a189d20f34e94c360d';
+                    const fromNumber = '+16187243098';
+
+                    const messageBody = `Hello ${sDriverName}, \n\nYour details have been updated successfully. Here are your updated details:\nVehicle Number:${sVehicleNumber} \nNew Slot Number:${sNewSlotNumber || sOldSlotNumber} \n\nThank you.\nBest regards,\nArtihcus Pvt Ltd.`;
+
+                    const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
+
+                    const payload = {
+                        To: driverPhoneFull,
+                        From: fromNumber,
+                        Body: messageBody
+                    };
+
+                    console.log("Sending SMS...");
+
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        headers: { 'Authorization': 'Basic ' + btoa(accountSid + ':' + authToken) },
+                        data: payload,
+                        success: function (data) {
+                            MessageToast.show('SMS sent successfully to the Driver..!');
+                            // console.log("SMS sent successfully:", data);
+                        },
+                        error: function (xhr, status, error) {
+                            sap.m.MessageToast.show('Failed to send SMS(Number is Valid ?): ' + error);
+                            console.error("SMS sending error:", error);
+                        }
                     });
 
-                    // Update new slot status to 'Occupied'
-                    await new Promise((resolve, reject) => {
-                        oModel.update(`/AllSlots(${oNewSlotData.ID})`, { status: 'Occupied' }, {
-                            success: resolve,
-                            error: reject
-                        });
-                    });
-
-                    // Send SMS to driver
-                    // const driverPhoneFull = "+91" + sDriverNumber;
-
-                    // // Twilio API credentials
-                    // const accountSid = 'AC9418cec2d41b4131132454d424d9f90c';
-                    // const authToken = '3893bb8ac2c9bf59db455bdf155e42ee';
-                    // const fromNumber = '+16187243098';
-
-                    // const messageBody = `Hello ${sDriverName}, \n\nYour details have been updated successfully. Here are your updated details:\nVehicle Number:${sVehicleNumber} \nNew Slot Number:${sNewSlotNumber} \n\nThank you.\nBest regards,\nArtihcus Pvt Ltd.`;
-
-                    // const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
-
-                    // const payload = {
-                    //     To: driverPhoneFull,
-                    //     From: fromNumber,
-                    //     Body: messageBody
-                    // };
-
-                    // console.log("Sending SMS...");
-
-                    // $.ajax({
-                    //     url: url,
-                    //     type: 'POST',
-                    //     headers: { 'Authorization': 'Basic ' + btoa(accountSid + ':' + authToken) },
-                    //     data: payload,
-                    //     success: function (data) {
-                    //         sap.m.MessageBox.success('SMS sent successfully to the Driver..!');
-                    //         console.log("SMS sent successfully:", data);
-                    //     },
-                    //     error: function (xhr, status, error) {
-                    //         sap.m.MessageToast.show('Failed to send SMS(Check Number is Valid ?): ' + error);
-                    //         console.error("SMS sending error:", error);
-                    //     }
-                    // });
-
-                    sap.m.MessageBox.success("Slot details updated successfully..!");
+                    sap.m.MessageBox.success("Slot details updated successfully!");
 
                     // Hide input fields and show text again
                     aCells.forEach(function (oCell) {
@@ -270,6 +450,8 @@ sap.ui.define([
                     // Refresh the AllocatedSlots and AllSlots tables
                     this.byId("AllocatedSlotsTable").getBinding("items").refresh();
                     this.byId("allSlotsTable").getBinding("items").refresh();
+                    this.onSlotcountAvailableSlots();
+                    this.onSlotcountOccupiedSlots();
 
                     // Refresh the dropdowns
                     await this.refreshSlotNumberComboBox();
@@ -303,12 +485,12 @@ sap.ui.define([
                     var oModel = this.getOwnerComponent().getModel();
                     oSelect.setModel(oModel);
                     oSelect.bindAggregation("items", {
-                        path: "/AllSlots",
+                        path: "/ZEWM_T_ALLSLOTSSet",
                         template: new sap.ui.core.Item({
-                            key: "{slotNumber}",
-                            text: "{slotNumber}"
+                            key: "{Slotno}",
+                            text: "{Slotno}"
                         }),
-                        filters: [new sap.ui.model.Filter("status", sap.ui.model.FilterOperator.EQ, "Available")]
+                        filters: [new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.EQ, "Available")]
                     });
                     resolve();
                 });
@@ -317,29 +499,33 @@ sap.ui.define([
             //For cancel the Edit details...
             onCancel: function () {
                 var oTable = this.byId("AllocatedSlotsTable");
-                var oSelectedItem = oTable.getSelectedItem();
+                // Loop through each item in the table to reset the fields
+                oTable.getItems().forEach(function (oItem) {
+                    // Reset the visibility of each editable field in the row
+                    oItem.getCells().forEach(function (oCell) {
+                        if (oCell instanceof sap.m.VBox) {
+                            var aInnerControls = oCell.getItems();
 
-                if (!oSelectedItem) {
-                    MessageToast.show("Please select a slot to cancel.");
-                    return;
-                }
-
-                var aCells = oSelectedItem.getCells();
-                aCells.forEach(function (oCell) {
-                    var aItems = oCell.getItems ? oCell.getItems() : [];
-                    aItems.forEach(function (oItem) {
-                        if (oItem instanceof sap.m.Text) {
-                            oItem.setVisible(true);
-                        } else if (oItem instanceof sap.m.Input || oItem instanceof sap.m.ComboBox || oItem instanceof sap.m.DatePicker) {
-                            oItem.setVisible(false);
+                            aInnerControls.forEach(function (oInnerControl) {
+                                if (oInnerControl instanceof sap.m.Input || oInnerControl instanceof sap.m.ComboBox) {
+                                    // Set visible=false for input/combo box fields
+                                    oInnerControl.setVisible(false);
+                                } else if (oInnerControl instanceof sap.m.Text) {
+                                    // Set visible=true for text fields
+                                    oInnerControl.setVisible(true);
+                                }
+                            });
                         }
                     });
                 });
 
-                this.byId("editButton").setVisible(true);
+                // Hide Save and Cancel buttons
                 this.byId("saveButton").setVisible(false);
                 this.byId("cancelButton").setVisible(false);
-                MessageToast.show("Edit operation cancelled.");
+
+                // Show Edit button
+                this.byId("editButton").setVisible(true);
+                MessageToast.show("Edit Operation cancelled!")
             },
 
             //Add a new Slot to Parking Space...
@@ -412,6 +598,10 @@ sap.ui.define([
                     MessageBox.error("Some technical issue occurred.");
                 }
                 this.onAddNewSlotDialog.close();
+                this.onSlotcountAllSlotsTAble();
+                this.onSlotcountAvailableSlots();
+                this.onSlotcountOccupiedSlots();
+                this.onSlotcountReservedSlots();
                 // Refresh the AllSlots table
                 this.getView().byId("allSlotsTable").getBinding("items").refresh();
             },
@@ -429,82 +619,232 @@ sap.ui.define([
             },
 
             //Search anything from AllocatedSlots Table...(this way also works fine)
-            onLiveSearchAllocatedPress: function (oEvent) {
-                var sQuery = oEvent.getParameter("newValue");
-                var aFilters = [];
+            onLiveSearchAllocatedPress: async function (oEvent) {
+                var sQuery = oEvent.getParameter("newValue").trim();
+                var oList = this.byId("AllocatedSlotsTable"); // Assuming this is your Allocated Slots table ID
+                var oBinding = oList.getBinding("items");
 
-                if (sQuery && sQuery.length > 0) {
-                    aFilters.push(new Filter("Slotnumber", FilterOperator.Contains, sQuery));
-                    aFilters.push(new Filter("Vehicletype", FilterOperator.Contains, sQuery));
-                    aFilters.push(new Filter("Vehiclenumber", FilterOperator.Contains, sQuery));
-                    aFilters.push(new Filter("Drivernumber", FilterOperator.Contains, sQuery));
-                    aFilters.push(new Filter("Drivername", FilterOperator.Contains, sQuery));
-                    aFilters.push(new Filter("ServiceType", FilterOperator.Contains, sQuery));
+                // Check if the binding is available
+                if (!oBinding) {
+                    console.error("Binding not found on the list");
+                    return;
+                }
 
-                    var oFinalFilter = new Filter({
-                        filters: aFilters,
-                        and: false
+                try {
+                    var oModel = this.getView().getModel(); // Assuming the model is bound to the view
+                    var sPath = "/ZEWM_T_ALDSLOTSSet"; // Your EntitySet path
+
+                    // Fetch the data from the OData service
+                    var aAllData = await new Promise((resolve, reject) => {
+                        oModel.read(sPath, {
+                            success: function (oData) {
+                                resolve(oData.results);
+                            },
+                            error: function (oError) {
+                                console.error("Failed to fetch all data:", oError);
+                                reject(oError);
+                            }
+                        });
                     });
 
-                    this.getView().byId("AllocatedSlotsTable").getBinding("items").filter(oFinalFilter);
-                } else {
-                    this.getView().byId("AllocatedSlotsTable").getBinding("items").filter([]);
+                    // If there's a search query, filter the data based on the query
+                    var aFilteredItems;
+                    if (sQuery) {
+                        aFilteredItems = aAllData.filter(function (oItem) {
+                            return (oItem.Slotnumber && oItem.Slotnumber.includes(sQuery)) ||
+                                (oItem.Vehicletype && oItem.Vehicletype.includes(sQuery)) ||
+                                (oItem.Vehiclenumber && oItem.Vehiclenumber.includes(sQuery)) ||
+                                (oItem.Drivernumber && oItem.Drivernumber.includes(sQuery)) ||
+                                (oItem.Drivername && oItem.Drivername.includes(sQuery)) ||
+                                (oItem.ServiceType && oItem.ServiceType.includes(sQuery));
+                        });
+                    } else {
+                        aFilteredItems = aAllData; // No search query, use all data
+                    }
+
+                    // Create a new JSON model with the filtered data
+                    var oFilteredModel = new sap.ui.model.json.JSONModel(aFilteredItems);
+
+                    // Bind the filtered model to the table
+                    oList.setModel(oFilteredModel);
+                    oList.bindItems({
+                        path: "/",
+                        template: oList.getBindingInfo("items").template
+                    });
+                } catch (error) {
+                    console.error("Error fetching or filtering data:", error);
                 }
             },
 
             //Search anything from History Table...
-            onLiveSearchAnythingPress: function (oEvent) {
-                debugger
-                var sQuery = oEvent.getParameter("newValue");
-                var aFilters = [];
+            onLiveSearchAnythingPress: async function (oEvent) {
+                var sQuery = oEvent.getParameter("newValue").trim();
+                var oList = this.byId("idHistoryTable"); // Assuming this is your History table ID
 
-                if (sQuery && sQuery.length > 0) {
-                    // Create multiple filters for each field to be searched
-                    aFilters.push(new sap.ui.model.Filter("Slotnumber", sap.ui.model.FilterOperator.Contains, sQuery));
-                    aFilters.push(new sap.ui.model.Filter("Vehicletype", sap.ui.model.FilterOperator.Contains, sQuery));
-                    aFilters.push(new sap.ui.model.Filter("Vehiclenumber", sap.ui.model.FilterOperator.Contains, sQuery));
-                    aFilters.push(new sap.ui.model.Filter("Drivernumber", sap.ui.model.FilterOperator.Contains, sQuery));
-                    aFilters.push(new sap.ui.model.Filter("Drivername", sap.ui.model.FilterOperator.Contains, sQuery));
-                    aFilters.push(new sap.ui.model.Filter("Servicetype", sap.ui.model.FilterOperator.Contains, sQuery));
+                //First getting data from OData...
+                try {
+                    var oModel = this.getView().getModel(); // Assuming the model is bound to the view
+                    var sPath = "/ZEWM_T_HISTORYSet"; // Your EntitySet path
 
-                    // Combine the filters with OR logic
-                    var oFinalFilter = new sap.ui.model.Filter({
-                        filters: aFilters,
-                        and: false
+                    // Fetch the data from the OData service
+                    var aAllData = await new Promise((resolve, reject) => {
+                        oModel.read(sPath, {
+                            success: function (oData) {
+                                resolve(oData.results);
+                            },
+                            error: function (oError) {
+                                console.error("Failed to fetch all data:", oError);
+                                reject(oError);
+                            }
+                        });
                     });
 
-                    // Apply the filter directly to the EntitySet using read method
-                    var oModel = this.getView().getModel();
-                    var oThis = this;
+                    // If there's a search query, filter the data based on the query
+                    var aFilteredData;
+                    if (sQuery) {
+                        aFilteredData = aAllData.filter(function (oItem) {
+                            return (oItem.Slotnumber && oItem.Slotnumber.includes(sQuery)) ||
+                                (oItem.Vehicletype && oItem.Vehicletype.includes(sQuery)) ||
+                                (oItem.Vehiclenumber && oItem.Vehiclenumber.includes(sQuery)) ||
+                                (oItem.Drivernumber && oItem.Drivernumber.includes(sQuery)) ||
+                                (oItem.Drivername && oItem.Drivername.includes(sQuery)) ||
+                                (oItem.Servicetype && oItem.Servicetype.includes(sQuery)) ||
+                                (oItem.Intime && oItem.Intime.includes(sQuery)) ||
+                                (oItem.Outtime && oItem.Outtime.includes(sQuery));
+                        });
+                    } else {
+                        aFilteredData = aAllData; // No search query, use all data
+                    }
 
-                    oModel.read("/ZEWM_T_HISTORYSet", {
-                        filters: [oFinalFilter],
-                        success: function (oData) {
-                            // Bind the filtered data to the table
-                            var oJSONModel = new sap.ui.model.json.JSONModel(oData.results);
-                            oThis.getView().byId("idHistoryTable").setModel(oJSONModel);
-                        },
-                        error: function (oError) {
-                            sap.m.MessageToast.show("Failed to retrieve data.");
-                            console.error(oError);
-                        }
+                    // Create a new JSON model with the filtered data
+                    var oFilteredModel = new sap.ui.model.json.JSONModel(aFilteredData);
+
+                    // Bind the filtered model to the table
+                    oList.setModel(oFilteredModel);
+                    oList.bindItems({
+                        path: "/",
+                        template: oList.getBindingInfo("items").template
                     });
 
-                } else {
-                    // If no query, clear the table binding
-                    oModel.read("/ZEWM_T_HISTORYSet", {
-                        success: function (oData) {
-                            var oJSONModel = new sap.ui.model.json.JSONModel(oData.results);
-                            oThis.getView().byId("idHistoryTable").setModel(oJSONModel);
-                        },
-                        error: function (oError) {
-                            sap.m.MessageToast.show("Failed to retrieve data.");
-                            console.error(oError);
-                        }
-                    });
+                } catch (error) {
+                    console.error("Error fetching or filtering data:", error);
                 }
             },
 
+            //Search thing in Reservations Table...
+            onLiveSearchReservationsPress: async function (oEvent) {
+                var sQuery = oEvent.getParameter("newValue").trim();
+                var oList = this.byId("idReservationsTable"); // Assuming this is your Reservations table ID
+                var oBinding = oList.getBinding("items");
+
+                // Check if the binding is available
+                if (!oBinding) {
+                    console.error("Binding not found on the list");
+                    return;
+                }
+
+                try {
+                    var oModel = this.getView().getModel(); // Assuming the model is bound to the view
+                    var sPath = "/ZEWM_T_RESERVSSet"; // Your EntitySet path
+
+                    // Fetch the data from the OData service
+                    var aAllData = await new Promise((resolve, reject) => {
+                        oModel.read(sPath, {
+                            success: function (oData) {
+                                resolve(oData.results);
+                            },
+                            error: function (oError) {
+                                console.error("Failed to fetch all data:", oError);
+                                reject(oError);
+                            }
+                        });
+                    });
+
+                    // If there's a search query, filter the data based on the query
+                    var aFilteredItems;
+                    if (sQuery) {
+                        aFilteredItems = aAllData.filter(function (oItem) {
+                            return (oItem.Vendorname && oItem.Vendorname.includes(sQuery)) ||
+                                (oItem.Vendornumber && oItem.Vendornumber.includes(sQuery)) ||
+                                (oItem.Drivername && oItem.Drivername.includes(sQuery)) ||
+                                (oItem.Drivernumber && oItem.Drivernumber.includes(sQuery)) ||
+                                (oItem.Vehicletype && oItem.Vehicletype.includes(sQuery)) ||
+                                (oItem.Vehiclenumber && oItem.Vehiclenumber.includes(sQuery)) ||
+                                (oItem.Servicetype && oItem.Servicetype.includes(sQuery)) ||
+                                (oItem.Intime && oItem.Intime.includes(sQuery));
+                        });
+                    } else {
+                        aFilteredItems = aAllData; // No search query, use all data
+                    }
+
+                    // Create a new JSON model with the filtered data
+                    var oFilteredModel = new sap.ui.model.json.JSONModel(aFilteredItems);
+
+                    // Bind the filtered model to the table
+                    oList.setModel(oFilteredModel);
+                    oList.bindItems({
+                        path: "/",
+                        template: oList.getBindingInfo("items").template
+                    });
+
+                } catch (error) {
+                    console.error("Error fetching or filtering data:", error);
+                }
+            },
+
+            //Serach anything from Reserved Slots table... 
+            onLiveSearchReservedSlotsPress: async function (oEvent) {
+                var sQuery = oEvent.getParameter("newValue").trim();
+                var oList = this.byId("idReservedslotsTable"); // Assuming this is your table ID
+
+                try {
+                    var oModel = this.getView().getModel(); // Assuming the model is bound to the view
+                    var sPath = "/ZEWM_T_RSDSLOTSSet"; // Your EntitySet path
+
+                    // Fetch the data from the OData service
+                    var aAllData = await new Promise((resolve, reject) => {
+                        oModel.read(sPath, {
+                            success: function (oData) {
+                                resolve(oData.results);
+                            },
+                            error: function (oError) {
+                                console.error("Failed to fetch all data:", oError);
+                                reject(oError);
+                            }
+                        });
+                    });
+
+                    // If there's a search query, filter the data based on the query
+                    var aFilteredData;
+                    if (sQuery) {
+                        aFilteredData = aAllData.filter(function (oItem) {
+                            return (oItem.Vendorname && oItem.Vendorname.includes(sQuery)) ||
+                                (oItem.Vendornumber && oItem.Vendornumber.includes(sQuery)) ||
+                                (oItem.Drivername && oItem.Drivername.includes(sQuery)) ||
+                                (oItem.Drivernumber && oItem.Drivernumber.includes(sQuery)) ||
+                                (oItem.Slotnumber && oItem.Slotnumber.includes(sQuery)) ||
+                                (oItem.Servicetype && oItem.Servicetype.includes(sQuery)) ||
+                                (oItem.Vehicletype && oItem.Vehicletype.includes(sQuery)) ||
+                                (oItem.Vehiclenumber && oItem.Vehiclenumber.includes(sQuery));
+                        });
+                    } else {
+                        aFilteredData = aAllData; // No search query, use all data
+                    }
+
+                    // Create a new JSON model with the filtered data
+                    var oFilteredModel = new sap.ui.model.json.JSONModel(aFilteredData);
+
+                    // Bind the filtered model to the table
+                    oList.setModel(oFilteredModel);
+                    oList.bindItems({
+                        path: "/",
+                        template: oList.getBindingInfo("items").template
+                    });
+
+                } catch (error) {
+                    console.error("Error fetching or filtering data:", error);
+                }
+            },
 
             //Assign a slot to vehicle...(1st window)
             onAssignSlotPress: async function () {
@@ -639,60 +979,6 @@ sap.ui.define([
                     // Create the assignment in AllocatedSlots
                     await this.createData(oModel, oPayload, "/ZEWM_T_ALDSLOTSSet");
 
-                    //             // Fetch slot number for the SMS
-                    //             const sSlotIDFilter = new sap.ui.model.Filter("ID", sap.ui.model.FilterOperator.EQ, sSlotNumber);
-                    //             await new Promise((resolve, reject) => {
-                    //                 oModel.read("/AllSlots", {
-                    //                     filters: [sSlotIDFilter],
-                    //                     success: function (oData) {
-                    //                         if (oData.results.length > 0) {
-                    //                             var oSlotDetails = oData.results[0];
-                    //                             var slotNumberForSMS = oSlotDetails.slotNumber; // Assume 'slotNumber' is the actual slot number field
-                    //                             resolve(slotNumberForSMS);
-                    //                         } else {
-                    //                             MessageBox.error("Slot details not found.");
-                    //                             reject("Slot details not found");
-                    //                         }
-                    //                     },
-                    //                     error: function (oError) {
-                    //                         MessageBox.error("Failed to fetch slot details: " + oError.message);
-                    //                         reject(oError);
-                    //                     }
-                    //                 });
-                    //             }).then(async (slotNumberForSMS) => {
-                    //                 // Send SMS to driver
-                    //                 var driverPhoneFull = "+91" + sDriverNumber;
-
-                    //                 // Twilio API credentials
-                    //                 const accountSid = 'AC9418cec2d41b4131132454d424d9f90c';
-                    //                 const authToken = '3893bb8ac2c9bf59db455bdf155e42ee';
-                    //                 const fromNumber = '+16187243098';
-
-                    //                 const messageBody = `Hello ${sDriverName}, \n\nPlease park your Vehicle at the following slot:\nVehicle Number:${sVehicleNumber} \nSlot Number:${slotNumberForSMS} \n\nThank you.\nBest regards,\nArtihcus Pvt Ltd.`;
-
-                    //                 const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
-
-                    //                 const payload = {
-                    //                     To: driverPhoneFull,
-                    //                     From: fromNumber,
-                    //                     Body: messageBody
-                    //                 };
-
-                    //                 $.ajax({
-                    //                     url: url,
-                    //                     type: 'POST',
-                    //                     headers: { 'Authorization': 'Basic ' + btoa(accountSid + ':' + authToken) },
-                    //                     data: payload,
-                    //                     success: function (data) {
-                    //                         //console.log('SMS sent successfully:', data);
-                    //                         sap.m.MessageBox.success('SMS sent successfully to the Driver..!');
-                    //                     },
-                    //                     error: function (xhr, status, error) {
-                    //                         //console.error('Error sending SMS:', error);
-                    //                         sap.m.MessageToast.show('Failed to send SMS: ' + error);
-                    //                     }
-                    //                 });
-
                     //Update slot status in AllSLots table..
                     var sPath = this.byId("idparkingLotSelect").getSelectedItem().getBindingContext().getPath();
                     const updatedParkingLot = {
@@ -707,6 +993,33 @@ sap.ui.define([
                         error: function (oError) {
                             sap.m.MessageBox.error("Failed to update: " + oError.message);
                         }.bind(this)
+                    });
+
+                    // Send SMS to driver using the details from the payload
+                    const driverPhoneFull = "+91" + sDriverNumber;
+                    const accountSid = 'AC9418cec2d41b4131132454d424d9f90c';
+                    const authToken = '574590d23b9133a189d20f34e94c360d';
+                    const fromNumber = '+16187243098';
+                    const messageBody = `Hello ${sDriverName}, \n\nPlease park your Vehicle at the following slot:\nVehicle Number:${sVehicleNumber} \nSlot Number:${sSlotNumber} \n\nThank you for choosing us.\nBest regards,\nArtihcus Pvt Ltd.`;
+                    const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
+
+                    const smsPayload = {
+                        To: driverPhoneFull,
+                        From: fromNumber,
+                        Body: messageBody
+                    };
+
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        headers: { 'Authorization': 'Basic ' + btoa(accountSid + ':' + authToken) },
+                        data: smsPayload,
+                        success: function (data) {
+                            MessageToast.show('SMS sent successfully to the Driver..!');
+                        },
+                        error: function (xhr, status, error) {
+                            sap.m.MessageToast.show('Failed to send SMS(Number is valid?): ' + error);
+                        }
                     });
 
                     // // After Assigning the Announcement will be raised...
@@ -734,6 +1047,9 @@ sap.ui.define([
 
                     //Generate the QR Code for the Assigned slot Details..
                     this.printAssignmentDetails();
+                    this.onSlotcountAllocatedSlotsTable();
+                    this.onSlotcountAvailableSlots();
+                    this.onSlotcountOccupiedSlots();
 
                     // Refresh the tables
                     this.getView().byId("AllocatedSlotsTable").getBinding("items").refresh();
@@ -761,19 +1077,21 @@ sap.ui.define([
                 this.getView().byId("iddriverNumber").setValue("");
                 this.getView().byId("iddriverName").setValue("");
                 this.getView().byId("idTypeOfDelivery").setSelectedKey("");
+                var oComboBox = this.getView().byId("idparkingLotSelect");
+                var oFilter = new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.EQ, "Available");
+                // Bind the items to the ComboBox, applying the filter
+                oComboBox.bindItems({
+                    path: "/ZEWM_T_ALLSLOTSSet",
+                    template: new sap.ui.core.Item({
+                        key: "{Id}",
+                        text: "{Slotno}"
+                    }),
+                    filters: [oFilter] // Apply the filter for available slots
+                });
 
-                // Clear previous filters and apply new filter
-                var oSlotsComboBox = this.getView().byId("idparkingLotSelect");
-                var oBinding = oSlotsComboBox.getBinding("items");
-                // Ensure that existing filters are removed
-                oBinding.aFilters = [];
-                // Apply filter to show only available slots
-                var aFilters = [
-                    new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.EQ, "Available")
-                ];
-                oBinding.filter(aFilters);
-                // Optionally, trigger a refresh to ensure the dropdown is updated
-                oBinding.refresh();
+                // Optionally, you can force a refresh of the model to ensure you're getting the latest data
+                var oModel = this.getView().getModel();
+                oModel.refresh(true);
             },
 
             //Data Visualization from Supervisor page, which is fetches the data from All slots Table...
@@ -907,6 +1225,10 @@ sap.ui.define([
                                         });
                                     });
                                     MessageBox.success("Slot unassigned successfully. Please check the history.");
+                                    oThis.onSlotcountHistoryTable();
+                                    oThis.onSlotcountAllocatedSlotsTable();
+                                    oThis.onSlotcountAvailableSlots();
+                                    oThis.onSlotcountOccupiedSlots();
 
                                     // Step 4: Refresh the relevant tables
                                     oThis.getView().byId("AllocatedSlotsTable").getBinding("items").refresh();
@@ -936,6 +1258,8 @@ sap.ui.define([
                     MessageToast.show("Please select a reservation to reject.");
                     return;
                 }
+                var oVendorNumber = oSelectedItem.getBindingContext().getObject().Vendornumber;
+                var oVendorName = oSelectedItem.getBindingContext().getObject().Vendorname;
                 var sPath = oSelectedItem.getBindingContext().getPath();
                 var oModel = this.getView().getModel();
                 var oThis = this;
@@ -945,6 +1269,7 @@ sap.ui.define([
                     {
                         actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                         onClose: async function (sAction) {
+                            debugger
                             if (sAction === MessageBox.Action.YES) {
                                 try {
                                     // Remove the entry from Reservations
@@ -953,6 +1278,8 @@ sap.ui.define([
                                             success: function () {
                                                 MessageBox.success("Reservation rejected successfully.");
                                                 oThis.getView().byId("idReservationsTable").getBinding("items").refresh();
+                                                oThis.onSlotcountReservationsTable();
+                                                oThis._updateNotificationCount();
                                                 resolve();
                                             },
                                             error: function (oError) {
@@ -962,38 +1289,35 @@ sap.ui.define([
                                         });
                                     });
 
-                                    // Retrieve vendor number from the selected item
-                                    // debugger
-                                    // var oContext = oSelectedItem.getBindingContext().getObject();
-                                    // var vendorPhoneFull = "+91" + oContext.Vendornumber;
-                                    // var messageBody = `Your Request for Slot was Rejected.\n\nDear Vendor,\n\nWe regret to inform you that there are no available slots in the parking space at the moment. We apologize for any inconvenience this may cause. Please try again after some time.\n\nThank you for choosing us.\n\nBest regards,\nArtihcus Global Pvt Ltd.`;
+                                    // Retrieve vendor number and other details from the selected item
+                                    var vendorPhoneFull = "+91" + oVendorNumber;
+                                    var messageBody = `Your request for a slot was rejected.\n\nDear Vendor '${oVendorName}'.\n\nWe regret to inform you that there are no available slots in the parking space at the moment. We apologize for any inconvenience this may cause. Please try again after some time.\n\nThank you for choosing us.\n\nBest regards,\nArtihcus Global Pvt Ltd.`;
 
-                                    // // Send SMS to vendor
-                                    // const accountSid = 'AC9418cec2d41b4131132454d424d9f90c';
-                                    // const authToken = '3893bb8ac2c9bf59db455bdf155e42ee';
-                                    // const fromNumber = '+16187243098';
-                                    // const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
+                                    // Send SMS to vendor
+                                    const accountSid = 'AC9418cec2d41b4131132454d424d9f90c';
+                                    const authToken = '574590d23b9133a189d20f34e94c360d';
+                                    const fromNumber = '+16187243098';
+                                    const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
 
-                                    // const payload = {
-                                    //     To: vendorPhoneFull,
-                                    //     From: fromNumber,
-                                    //     Body: messageBody
-                                    // };
+                                    const payload = {
+                                        To: vendorPhoneFull,
+                                        From: fromNumber,
+                                        Body: messageBody
+                                    };
 
-                                    // await $.ajax({
-                                    //     url: url,
-                                    //     type: 'POST',
-                                    //     headers: { 'Authorization': 'Basic ' + btoa(accountSid + ':' + authToken) },
-                                    //     data: payload,
-                                    //     success: function (data) {
-                                    //         //console.log('SMS sent successfully:', data);
-                                    //         sap.m.MessageToast.show('SMS sent successfully to the vendor.');
-                                    //     },
-                                    //     error: function (xhr, status, error) {
-                                    //         //console.error('Error sending SMS:', error);
-                                    //         sap.m.MessageToast.show('Failed to send SMS(Mobile Number is valid ?): ' + error);
-                                    //     }
-                                    // });
+                                    await $.ajax({
+                                        url: url,
+                                        type: 'POST',
+                                        headers: { 'Authorization': 'Basic ' + btoa(accountSid + ':' + authToken) },
+                                        data: payload,
+                                        success: function () {
+                                            sap.m.MessageToast.show('SMS sent successfully to the vendor.');
+                                        },
+                                        error: function (xhr, status, error) {
+                                            sap.m.MessageToast.show('Failed to send SMS. Please check the mobile number and try again.');
+                                            console.error('Error sending SMS:', error);
+                                        }
+                                    });
                                 } catch (error) {
                                     MessageBox.error("An error occurred: " + error.message);
                                     console.error("Error: ", error);
@@ -1146,32 +1470,32 @@ sap.ui.define([
                     });
 
                     // Send SMS to vendor with the reservation details
-                    // const vendorPhoneFull = "+91" + oConfirmRequestModel.vendorNumber;
-                    // const messageBody = `Hello, Your request for a slot was accepted.\n\nDear Vendor,\nThank you for your request. We're pleased to inform you that we have successfully reserved a slot for you. Here are the details of your reserved slot:\nDriver Name: ${oConfirmRequestModel.driverName},\nDriver Number: ${oConfirmRequestModel.driverNumber},\nVehicle Number: ${oConfirmRequestModel.vehicleNumber},\nSlot Number: ${slotData.Slotno},\nService Type: ${oConfirmRequestModel.serviceType}.\nPlease send your truck to our warehouse.\n\nThank you for choosing us.\n\nBest regards,\nArtihcus Global Pvt Ltd.`;
+                    const vendorPhoneFull = "+91" + oConfirmRequestModel.Vendornumber;
+                    const messageBody = `Hello, Your request for a slot was accepted.\n\nDear Vendor: ${oConfirmRequestModel.Vendorname}.\nThank you for your request. We're pleased to inform you that we have successfully reserved a slot for you. Here are the details of your reserved slot:\nDriver Name: ${oConfirmRequestModel.Drivername},\nDriver Number: ${oConfirmRequestModel.Drivernumber},\nVehicle Number: ${oConfirmRequestModel.Vehiclenumber},\nSlot Number: ${slotData.Slotno},\nService Type: ${oConfirmRequestModel.Servicetype}.\nPlease send your truck to our warehouse.\n\nThank you for choosing us.\n\nBest regards,\nArtihcus Global Pvt Ltd.`;
 
-                    // const accountSid = 'AC9418cec2d41b4131132454d424d9f90c';
-                    // const authToken = '3893bb8ac2c9bf59db455bdf155e42ee';
-                    // const fromNumber = '+16187243098';
-                    // const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
+                    const accountSid = 'AC9418cec2d41b4131132454d424d9f90c';
+                    const authToken = '574590d23b9133a189d20f34e94c360d';
+                    const fromNumber = '+16187243098';
+                    const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
 
-                    // const payload = {
-                    //     To: vendorPhoneFull,
-                    //     From: fromNumber,
-                    //     Body: messageBody
-                    // };
+                    const payload = {
+                        To: vendorPhoneFull,
+                        From: fromNumber,
+                        Body: messageBody
+                    };
 
-                    // await $.ajax({
-                    //     url: url,
-                    //     type: 'POST',
-                    //     headers: { 'Authorization': 'Basic ' + btoa(accountSid + ':' + authToken) },
-                    //     data: payload,
-                    //     success: function (data) {
-                    //         sap.m.MessageBox.success('SMS sent successfully to the vendor, please cross-check once.');
-                    //     },
-                    //     error: function (xhr, status, error) {
-                    //         sap.m.MessageToast.show('Failed to send SMS. Please check the number.');
-                    //     }
-                    // });
+                    await $.ajax({
+                        url: url,
+                        type: 'POST',
+                        headers: { 'Authorization': 'Basic ' + btoa(accountSid + ':' + authToken) },
+                        data: payload,
+                        success: function (data) {
+                            sap.m.MessageBox.success('SMS sent successfully to the vendor, please cross-check once.');
+                        },
+                        error: function (xhr, status, error) {
+                            sap.m.MessageToast.show('Failed to send SMS. Please check the number.');
+                        }
+                    });
 
                     // Remove the confirmed or rejected request from the Reservations table
                     const oSelectedItem = this.byId("idReservationsTable").getSelectedItem();
@@ -1183,6 +1507,10 @@ sap.ui.define([
                                 success: () => {
                                     sap.m.MessageToast.show("Request removed successfully.");
                                     oThis.getView().byId("idReservationsTable").getBinding("items").refresh();
+                                    oThis.onSlotcountReservationsTable();
+                                    oThis.onSlotcountReservedSlotsTable();
+                                    oThis.onSlotcountOccupiedSlots();
+                                    oThis.onSlotcountReservedSlots();
                                     resolve();
                                 },
                                 error: (oError) => {
@@ -1196,7 +1524,7 @@ sap.ui.define([
                     }
 
                     // Show success message and close the dialog if needed
-                    sap.m.MessageToast.show("Slot reserved successfully!");
+                    //sap.m.MessageToast.show("Slot reserved successfully!");
                     if (this.onRequestConfirmSlotDialog) {
                         this.onRequestConfirmSlotDialog.close();
                     }
@@ -1383,37 +1711,37 @@ sap.ui.define([
                     });
                     sap.m.MessageToast.show("Slot status updated to Available.");
 
-                    //Send SMS to driver
-                    // const driverPhoneFull = "+91" + oDriverNumber;
-                    // const messageBody = `Hello ${oDriverName},\n\nPlease park your vehicle at the following slot:\nSlot Number: ${oSlotNumber} \nVehicle Number: ${oVehicleNumber}\n\nThank you.\nBest regards,\nArithcus Global Pvt Ltd.`;
+                    //Send SMS to driver Phone...
+                    const driverPhoneFull = "+91" + oDriverNumber;
+                    const messageBody = `Hello ${oDriverName},\n\nPlease park your vehicle at the following slot:\nSlot Number: ${oSlotNumber} \nVehicle Number: ${oVehicleNumber}\n\nThank you for choosing us.\nBest regards,\nArithcus Global Pvt Ltd.`;
 
-                    // const accountSid = 'AC9418cec2d41b4131132454d424d9f90c';
-                    // const authToken = '3893bb8ac2c9bf59db455bdf155e42ee';
-                    // const fromNumber = '+16187243098';
-                    // const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
+                    const accountSid = 'AC9418cec2d41b4131132454d424d9f90c';
+                    const authToken = '574590d23b9133a189d20f34e94c360d';
+                    const fromNumber = '+16187243098';
+                    const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
 
-                    // const payload = {
-                    //     To: driverPhoneFull,
-                    //     From: fromNumber,
-                    //     Body: messageBody
-                    // };
+                    const payload = {
+                        To: driverPhoneFull,
+                        From: fromNumber,
+                        Body: messageBody
+                    };
 
-                    // await $.ajax({
-                    //     url: url,
-                    //     type: 'POST',
-                    //     headers: {
-                    //         'Authorization': 'Basic ' + btoa(accountSid + ':' + authToken)
-                    //     },
-                    //     data: payload,
-                    //     success: function (data) {
-                    //         console.log('SMS sent successfully:', data);
-                    //         sap.m.MessageToast.show('SMS sent successfully to the driver.');
-                    //     },
-                    //     error: function (xhr, status, error) {
-                    //         console.error('Error sending SMS:', error);
-                    //         sap.m.MessageToast.show('Failed to send SMS: ' + error);
-                    //     }
-                    // });
+                    await $.ajax({
+                        url: url,
+                        type: 'POST',
+                        headers: {
+                            'Authorization': 'Basic ' + btoa(accountSid + ':' + authToken)
+                        },
+                        data: payload,
+                        success: function (data) {
+                            console.log('SMS sent successfully:', data);
+                            sap.m.MessageToast.show('SMS sent successfully to the driver.');
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error sending SMS:', error);
+                            sap.m.MessageToast.show('Failed to send SMS: ' + error);
+                        }
+                    });
 
                     // Remove the reserved slot entry after confirming assignment
                     const sReservedSlotPath = oSelectedItem.getBindingContext().getPath();
@@ -1431,6 +1759,14 @@ sap.ui.define([
                             }
                         });
                     });
+                    // Print Assignment Details
+                    this.printAssignmentDetailsFromReservedSlots(oSelectedData);
+                    this.getView().byId("idparkingLotSelect").getBinding("items").refresh();
+                    this.onSlotcountReservedSlotsTable();
+                    this.onSlotcountAllocatedSlotsTable();
+                    this.onSlotcountAvailableSlots();
+                    this.onSlotcountOccupiedSlots();
+                    this.onSlotcountReservedSlots();
                     // Close the dialog
                     this.onAssignReserveSlotConfirmDialog.close();
                 } catch (error) {
@@ -1476,7 +1812,7 @@ sap.ui.define([
 
                             // Step 3: Confirm unassign action
                             MessageBox.warning(
-                                `Are you sure you want to Un-Assign this Slot '${allocatedSlotData.Slotnumber}'?`,
+                                `Are you sure you want to unassign Slot '${allocatedSlotData.Slotnumber}' for the Vehicle Number '${sVehicleNumber}'?.`,
                                 {
                                     actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                                     onClose: async function (sAction) {
@@ -1539,6 +1875,8 @@ sap.ui.define([
                                                 });
 
                                                 MessageBox.success("Slot unassigned successfully. Please check the history.");
+                                                oThis.onSlotcountHistoryTable();
+                                                oThis.onSlotcountAllocatedSlotsTable();
 
                                                 // Step 7: Refresh the relevant tables
                                                 oThis.getView().byId("AllocatedSlotsTable").getBinding("items").refresh();
@@ -1590,6 +1928,30 @@ sap.ui.define([
                 }
                 this._pPopover.then(function (oPopover) {
                     oPopover.openBy(oButton);
+                });
+            },
+            _updateNotificationCount: function () {
+                var oModel = this.getView().getModel();
+                var that = this;
+
+                // Fetch a limited number of entities from NotifySet
+                oModel.read("/ZEWM_T_RESERVSSet", {
+                    urlParameters: {
+                        "$top": 1 // Fetch a small number of records
+                    },
+                    success: function (oData) {
+                        // Count the number of fetched records
+                        var count = oData.results.length;
+                        // Update the BadgeCustomData value
+                        var oBadge = that.byId("idBadge");
+                        if (oBadge) {
+                            oBadge.setValue(count.toString());
+                        }
+                    },
+                    error: function (oError) {
+                        // Handle error scenario
+                        console.error("Error fetching NotifySet data: ", oError);
+                    }
                 });
             },
 

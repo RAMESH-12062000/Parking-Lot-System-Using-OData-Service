@@ -5,9 +5,37 @@
 .AlternateRowColorAllslots{
     background-color: rgba(203, 208, 211, 0.678);
 }
-.SubTitleOnToolBar{
-    font-size: larger !important;
-    color: rgb(6, 59, 139) !important;
+.AvailableSlots{
+    background-color: white !important;
+    color: rgb(4, 114, 4) !important;
+    font-size: medium !important;
+}
+.OccupiedSlots{
+    background-color: white !important;
+    color: rgb(221, 4, 4) !important;
+    font-size: medium !important;
+}
+.ReservedSlots{
+    background-color: white !important;
+    color: rgb(233, 153, 5) !important;
+    font-size: medium !important;
+}
+.notificationBadge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red; /* Example color, adjust as needed */
+    color: white; /* Text color */
+    border-radius: 50%;
+    padding: 2px 6px; /* Adjust size */
+    font-size: 12px; /* Adjust size */
+}
+.HeaderToolBar{
+    background-color: #fce3c0 !important; /* Soft peach */
+    background-image: linear-gradient(to bottom, #79edf1b9,  #e0bdeeb7) !important; /* Gradient to a vibrant orange */
+    color: #333333 !important; /* Dark text for contrast */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important; /* Subtle shadow effect */
+    border-radius: 1rem;
 }
 
 .HomePageBackground {
@@ -79,11 +107,13 @@
     background-color: white !important;
     color: green;
     margin-right: 0.5rem;
+    border-color: transparent !important;
 }
 
 .ClearBtnFromAssigning .sapMBtnText {
     background-color: white !important;
     color: red;
+    border-color: transparent !important;
 }
 
 .SidePanelContent {
@@ -145,7 +175,7 @@
     color: darkblue !important;
 }
 
-.reservationrejectbtn,
+
 .CancelBtnFromAllocatedSlots,
 .CancelBtnFromReservedslotsFragment123,
 .CacelBtnfromReservationFragment {
@@ -153,8 +183,7 @@
     color: red !important;
 }
 
-.confirmReservationBtn,
-.AssignBtnfromReservedSlots,
+
 .SaveBtnFromAllocatedSlots,
 .AddaNewSlot,
 .AssignBtnFromReservedslotsFragment,
@@ -163,15 +192,19 @@
     color: green !important;
 }
 
-/* To ensure the text color is applied, you might need to use this selector */
-.reservationrejectbtn .sapMBtnText {
-    color: rgb(204, 5, 5) !important;
+.AssignBtnfromReservedSlots, .reservationrejectbtn, .confirmReservationBtn{
+    background-image: linear-gradient(to bottom, #79edf1b9,  #e0bdeeb7) !important;
+    background-color: #fce3c0 !important;
+    border-radius: 1rem;
 }
 
+/* To ensure the text color is applied, you might need to use this selector */
+.reservationrejectbtn .sapMBtnText {
+    color: red !important;
+}
 .CancelBtnFromAllocatedSlots .sapMBtnText {
     color: rgb(204, 5, 5) !important;
 }
-
 .CancelAddNewSlot .sapMBtnText {
     color: red !important;
 }
@@ -181,19 +214,15 @@
 .CacelBtnfromReservationFragment .sapMBtnText {
     color: red !important;
 }
-
 .confirmReservationBtn .sapMBtnText {
-    color: green !important;
+    color: rgb(8, 126, 4) !important;
 }
-
 .AddaNewSlot .sapMBtnText {
     color: green !important;
 }
-
 .AssignBtnfromReservedSlots .sapMBtnText {
     color: green !important;
 }
-
 .SaveBtnFromAllocatedSlots .sapMBtnText {
     color: green !important;
 }
@@ -234,7 +263,7 @@
     background-color: rgba(24, 126, 241, 0.342) !important;
 }
 
-.RightSideContent {
+.BackgroundForDataVisuals {
     background-image: url('https://th.bing.com/th/id/OIP.3Qpqm7H3dJp4QUNXCEWmzQAAAA?rs=1&pid=ImgDetMain') !important;
 }
 
@@ -249,4 +278,13 @@
 .HedingNameColor {
     color: rgb(219, 3, 68) !important;
     /* Pink color for the header names */
+}
+
+.ClassLableroot1{
+    color: #8a0596b9 !important ;
+    font-weight: bolder;
+    font-size: 0.92rem;
+}
+.LeftSidePanelText{
+    font-weight: bolder !important;
 }

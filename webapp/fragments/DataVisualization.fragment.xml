@@ -15,25 +15,30 @@
         contentWidth="70%"
         contentHeight="70%"
     >
-        <Title
-            id="idTitleBarForChart"
-            text="PARKING LOT MANAGEMENT:"
-            class="DatavisualPARKINGLOT"
-        />
-        <Button
-            id="idBtnRefreshDataVisualizationDialog"
-            icon="sap-icon://synchronize"
-            press="onRefreshDataVisualizationChart"
-            type="Transparent"
-            class="DatavisualPARKINGLOT123"
-        />
-        <endButton>
-            <Button
-                id="idbtnCloseDataVisualsGraph"
-                text="Close"
-                press="onClosePiechartDialog"
-            />
-        </endButton>
+        <customHeader>
+            <Toolbar id="idToolbarforDataVisuals">
+                <Title
+                    id="idTitleBarForChart"
+                    text="PARKING LOT MANAGEMENT:"
+                    class="DatavisualPARKINGLOT"
+                />
+                <ToolbarSpacer id="idDatageographic" />
+                <Button
+                    id="idBtnRefreshDataVisualizationDialog"
+                    icon="sap-icon://synchronize"
+                    press="onRefreshDataVisualizationChart"
+                    type="Transparent"
+                    class="DatavisualPARKINGLOT123"
+                />
+                <Button
+                    id="idbtnCloseDataVisualsGraph"
+                    icon="sap-icon://decline"
+                    tooltip="Close"
+                    press="onClosePiechartDialog"
+                    type="Transparent"
+                />
+            </Toolbar>
+        </customHeader>
         <VBox
             id="vbox"
             fitContainer="true"
@@ -50,7 +55,7 @@
                                 vizProperties="{
                                     plotArea: {dataLabel: {visible: true}},
                                     title: {text:'Parking Lot Status:'},
-                                    colorPalette: ['#57DA2A', '#EA2365', '#090979'],
+                                    colorPalette: ['#57DA2A', '#EA2365', '#FFA500'],
                                     legend: {visible: true,title: 'Status'}
                                     }"
                                 selectData="myOnClickHandler"
@@ -77,7 +82,6 @@
                                         </viz.data:measures>
                                     </viz.data:FlattenedDataset>
                                 </viz:dataset>
-
                                 <viz:feeds>
                                     <viz.feeds:FeedItem
                                         id="FeedItem89875"

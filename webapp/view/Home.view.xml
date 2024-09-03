@@ -100,8 +100,7 @@
                     <customData>
                         <BadgeCustomData
                             id="idBadge"
-                            class="badge"
-                            value="{/ZEWM_T_RESERVSSet/$count}"
+                            class="notificationBadge"
                             visible="true"
                         />
                     </customData>
@@ -145,7 +144,6 @@
                         id="idGenSlotAssignMent"
                         key="root1"
                         text="Slot Assignment:"
-                        class="LeftSidePanelText"
                         icon="sap-icon://activity-assigned-to-goal"
                     />
                     <tnt:NavigationListItem
@@ -225,7 +223,7 @@
                                 ariaLabelledBy="Title1"
                             >
                                 <form:toolbar>
-                                    <Toolbar id="TB1">
+                                    <Toolbar id="TB1" class="HeaderToolBar">
                                         <Title
                                             id="Title1"
                                             text="SLOT ASSIGNMENT:"
@@ -235,8 +233,8 @@
                                         />
                                         <Button
                                             id="IDGenButton3"
-                                            icon="sap-icon://action-settings"
-                                            press="onPressSettingsBtn"
+                                            icon="sap-icon://refresh"
+                                            press="onPressRefreshBtnSlotAssignment"
                                         />
                                     </Toolbar>
                                 </form:toolbar>
@@ -247,7 +245,7 @@
                                     >
                                         <Title
                                             id="Title2"
-                                            text="Parking Slot Assign to Vehicle:"
+                                            text="Parking Slot Assign to the Vehicle:"
                                         />
                                         <ToolbarSpacer
                                             id="IDGenToolbarSpacer4"
@@ -257,6 +255,7 @@
                                         id="IDGenLabel6"
                                         text="Service Type"
                                         required="true"
+                                        class="ClassLableroot1"
                                     />
                                     <m:ComboBox
                                         id="idTypeOfDelivery"
@@ -279,6 +278,7 @@
                                         id="IDGenLabel1"
                                         text="Slot Number"
                                         required="true"
+                                        class="ClassLableroot1"
                                     />
                                     <m:ComboBox
                                         id="idparkingLotSelect"
@@ -297,6 +297,7 @@
                                         id="IDGenLabel2"
                                         text="Driver Name"
                                         required="true"
+                                        class="ClassLableroot1"
                                     />
                                     <Input
                                         id="iddriverName"
@@ -307,6 +308,7 @@
                                         id="IDGenLabel3"
                                         text="Driver Number"
                                         required="true"
+                                        class="ClassLableroot1"
                                     />
                                     <Input
                                         id="iddriverNumber"
@@ -317,6 +319,7 @@
                                         id="IDGenLabel4"
                                         text="Vehicle Number"
                                         required="true"
+                                        class="ClassLableroot1"
                                     />
                                     <Input
                                         id="idvehicleNumber"
@@ -327,6 +330,7 @@
                                         id="IDGenLabel5"
                                         text="Vehicle Type"
                                         required="true"
+                                        class="ClassLableroot1"
                                     />
                                     <Input
                                         id="idvehicleType"
@@ -359,8 +363,8 @@
                         id="root2"
                         horizontal="false"
                         vertical="true"
+                        width="100%"
                         height="100%"
-                        width="auto"
                         class="sapUiContentPadding"
                     >
                         <m:VBox id="idVBoxallslots">
@@ -384,7 +388,7 @@
                                 ariaLabelledBy="Title1"
                             >
                                 <form:toolbar>
-                                    <Toolbar id="TB2">
+                                    <Toolbar id="TB2" class="HeaderToolBar">
                                         <Title
                                             id="Title1455"
                                             text="All SLOTS:"
@@ -425,7 +429,24 @@
                                     >
                                         <Title
                                             id="Title3"
-                                            text="All Slots from the Parking Space:"
+                                            text="All Slots from the Parking Space:-"
+                                        />
+                                        <Title
+                                            id="TitleAvailable"
+                                            text="Available:"
+                                            class="AvailableSlots"
+                                        />
+                                        <m:ToolbarSpacer id="idToolBarOccupied" width="4%" ></m:ToolbarSpacer>
+                                        <Title
+                                            id="TitleOccupied"
+                                            text="Occupied:"
+                                            class="OccupiedSlots"
+                                        />
+                                        <m:ToolbarSpacer id="idToolBarReserved" width="4%" ></m:ToolbarSpacer>
+                                        <Title
+                                            id="TitleReserved"
+                                            text="Reserved:"
+                                            class="ReservedSlots"
                                         />
                                         <m:ToolbarSpacer
                                             id="idToolbarAllSlots"
@@ -465,7 +486,7 @@
                                     </Toolbar>
                                     <Table
                                         id="allSlotsTable"
-                                        width="auto"
+                                        width="100%"
                                         alternateRowColors="true"
                                         items="{/ZEWM_T_ALLSLOTSSet}"
                                     >
@@ -487,7 +508,7 @@
                                             <Column id="IDGenColumn3">
                                                 <Text
                                                     id="IDGenText7"
-                                                    text="Status: (Available/Occupeid)"
+                                                    text="Status: (Available/Occupied)"
                                                     class="HedingNameColor"
                                                 />
                                             </Column>
@@ -507,7 +528,6 @@
                                                         id="IDGenText9"
                                                         text="{Servicetype}"
                                                     />
-
                                                     <ObjectStatus
                                                         id="IDGenText11"
                                                         text="{Status}"
@@ -552,7 +572,7 @@
                                 ariaLabelledBy="Title1"
                             >
                                 <form:toolbar>
-                                    <Toolbar id="TB3">
+                                    <Toolbar id="TB3" class="HeaderToolBar">
                                         <Title
                                             id="TitleAllocated"
                                             text="ASSIGNED SLOTS:"
@@ -806,7 +826,7 @@
                                 ariaLabelledBy="Title1"
                             >
                                 <form:toolbar>
-                                    <Toolbar id="TB4">
+                                    <Toolbar id="TB4" class="HeaderToolBar">
                                         <Title
                                             id="Title1455896"
                                             text="RESERVATIONS:"
@@ -991,10 +1011,10 @@
                                 ariaLabelledBy="Title1"
                             >
                                 <form:toolbar>
-                                    <Toolbar id="TB5">
+                                    <Toolbar id="TB5" class="HeaderToolBar">
                                         <Title
                                             id="Title1489045"
-                                            text="RESERVED SLOTS FOR VENDORS:"
+                                            text="RESERVED SLOTS FOR VENDOR:"
                                         />
                                         <ToolbarSpacer id="IDGenToolbar567" />
                                         <m:Button
@@ -1174,7 +1194,7 @@
                                 ariaLabelledBy="Title1"
                             >
                                 <form:toolbar>
-                                    <Toolbar id="TB6">
+                                    <Toolbar id="TB6" class="HeaderToolBar">
                                         <Title
                                             id="Title145589676"
                                             text="TOATL HISTORY:"

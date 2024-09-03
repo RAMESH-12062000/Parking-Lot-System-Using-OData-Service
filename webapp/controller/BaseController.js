@@ -79,6 +79,26 @@ sap.ui.define(
         MessageToast.show("Slot Numbers Sorted!")
       },
 
+      //Refresh Btn from SlotAssignment...
+      onPressRefreshBtnSlotAssignment: function () {
+        var oComboBox = this.getView().byId("idparkingLotSelect");
+        var oFilter = new sap.ui.model.Filter("Status", sap.ui.model.FilterOperator.EQ, "Available");
+        // Bind the items to the ComboBox, applying the filter
+        oComboBox.bindItems({
+          path: "/ZEWM_T_ALLSLOTSSet",
+          template: new sap.ui.core.Item({
+            key: "{Id}",
+            text: "{Slotno}"
+          }),
+          filters: [oFilter] // Apply the filter for available slots
+        });
+
+        // Optionally, you can force a refresh of the model to ensure you're getting the latest data
+        var oModel = this.getView().getModel();
+        oModel.refresh(true);
+        sap.m.MessageToast.show("Slot Dropdown refreshed with available Slots.");
+      },
+
       //Refresh Btn in AllSlots Table
       onRefreshBtnPress: function () {
         var oTable = this.getView().byId("allSlotsTable");
@@ -90,6 +110,10 @@ sap.ui.define(
         oBinding.filter([]);
         //Refresh the Table...
         this.getView().byId("allSlotsTable").getBinding("items").refresh();
+        this.onSlotcountAllSlotsTAble();
+        this.onSlotcountAvailableSlots();
+        this.onSlotcountOccupiedSlots();
+        this.onSlotcountReservedSlots();
         MessageToast.show("All Slots table Refreshed!");
       },
       //Refresh Btn in AllocatedSlots Table
@@ -98,12 +122,20 @@ sap.ui.define(
         var oBinding = oTable.getBinding("items");
         oBinding.filter([]);
         oBinding.refresh();
+        this.onSlotcountAvailableSlots();
+        this.onSlotcountOccupiedSlots();
+        this.onSlotcountReservedSlots();
         MessageToast.show("Allocated Slots table Refreshed!")
       },
       //Refresh Btn in Reservations Table
       onRefreshReservations: function () {
         this.getView().byId("idReservationsTable").getBinding("items").filter([]);
         this.getView().byId("idReservationsTable").getBinding("items").refresh();
+        this.onSlotcountReservationsTable();
+        this.onSlotcountAvailableSlots();
+        this.onSlotcountOccupiedSlots();
+        this.onSlotcountReservedSlots();
+        this._updateNotificationCount();
         MessageToast.show("Reservations table Refreshed!")
       },
       //Refresh Btn in History Table
@@ -112,6 +144,7 @@ sap.ui.define(
         var oBinding = oTable.getBinding("items");
         oBinding.filter([]);
         oBinding.refresh();
+        this.onSlotcountHistoryTable();
         sap.m.MessageToast.show("History table refreshed!");
       },
 
@@ -195,7 +228,7 @@ sap.ui.define(
           // Refresh the VizFrame binding
           const oVizFrame = oView.byId("idbarchart");
           oVizFrame.getDataset().getBinding("data").refresh(true);
-          MessageBox.success("Data visualization refreshed successfully!");
+          MessageToast.show("Data visualization refreshed successfully!");
 
         } catch (error) {
           sap.m.MessageBox.error("Failed to refresh data visualization: " + error.message);
@@ -304,6 +337,86 @@ sap.ui.define(
           printWindow.print();
         }, 1500); // Timeout to ensure the QR code is rendered before printing
       },
+
+      //QR Code Generator from Reserved Slots while Assignment...
+      printAssignmentDetailsFromReservedSlots: function (oSelectedData) {
+        debugger
+        const currentDateTime = new Date();
+        const formattedDate = currentDateTime.toLocaleDateString();
+        const formattedTime = currentDateTime.toLocaleTimeString();
+
+        // Create a new window for printing
+        var printWindow = window.open('', '', 'height=600,width=800');
+
+        // Write HTML content to the print window
+        printWindow.document.write('<html><head><title>Print Receipt</title>');
+        printWindow.document.write('<style>');
+        printWindow.document.write('body { font-family: Arial, sans-serif; margin: 20px; }');
+        printWindow.document.write('.details-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }');
+        printWindow.document.write('.details-table th, .details-table td { border: 1px solid #000; padding: 8px; text-align: left; }');
+        printWindow.document.write('.details-table th { background-color: #f2f2f2; }');
+        printWindow.document.write('.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }');
+        printWindow.document.write('.date-time { flex-grow: 1; }');
+        printWindow.document.write('.qr-code { margin-right: 50px; }');
+        printWindow.document.write('.truck-image { text-align: center; margin-top: 20px; }');
+        printWindow.document.write('.logo { position: absolute; top: 20px; right: 20px; }');
+        printWindow.document.write('.Dummy { padding:1rem; }');
+        printWindow.document.write('</style>');
+        printWindow.document.write('</head><body>');
+
+        // Add the logo to the top right corner
+        printWindow.document.write('<div class="logo">');
+        printWindow.document.write('<img src="https://artihcus.com/assets/img/AG-logo.png" height="50"/>'); // Reduced size
+        printWindow.document.write('</div>');
+        printWindow.document.write('<div class="Dummy">');
+        printWindow.document.write('<div class="Dummy">');
+        printWindow.document.write('</div>');
+
+        printWindow.document.write('<div class="title">');
+        printWindow.document.write('<h1>Assigned Parking Slot Details Slip:</h1>');
+        printWindow.document.write('</div>');
+        printWindow.document.write('<div class="header">');
+        printWindow.document.write('<div class="date-time">');
+        printWindow.document.write('<p><strong>Date:</strong> ' + formattedDate + '</p>');
+        printWindow.document.write('<p><strong>Time:</strong> ' + formattedTime + '</p>');
+        printWindow.document.write('</div>');
+        printWindow.document.write('<div class="qr-code" id="qrcode"></div>');
+        printWindow.document.write('</div>');
+        printWindow.document.write('<table class="details-table">');
+        printWindow.document.write('<tr><th>Property</th><th>Details</th></tr>');
+        printWindow.document.write('<tr><td>Slot Number</td><td>' + oSelectedData.Slotnumber + '</td></tr>');
+        printWindow.document.write('<tr><td>Vehicle Number</td><td>' + oSelectedData.Vehiclenumber + '</td></tr>');
+        printWindow.document.write('<tr><td>Vehicle Type</td><td>' + oSelectedData.Vehicletype + '</td></tr>');
+        printWindow.document.write('<tr><td>Driver Phone Number</td><td>' + oSelectedData.Drivernumber + '</td></tr>');
+        printWindow.document.write('<tr><td>Driver Name</td><td>' + oSelectedData.Drivername + '</td></tr>');
+        printWindow.document.write('<tr><td>Delivery Type</td><td>' + oSelectedData.Servicetype + '</td></tr>');
+        printWindow.document.write('</table>');
+        printWindow.document.write('<div class="truck-image">');
+        printWindow.document.write('</div>');
+
+        // Close document and initiate QR code generation
+        printWindow.document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>');
+        printWindow.document.write('<script>');
+        printWindow.document.write('setTimeout(function() {');
+        printWindow.document.write('new QRCode(document.getElementById("qrcode"), {');
+        printWindow.document.write('text: "' + oSelectedData.Vehiclenumber + '",'); // QR code contains vehicle number
+        printWindow.document.write('width: 100,');
+        printWindow.document.write('height: 100');
+        printWindow.document.write('});');
+        printWindow.document.write('}, 1000);'); // Adjust the timeout for QR code rendering
+        printWindow.document.write('</script>');
+
+        // Close document
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+
+        // Wait for QR code to be fully rendered before printing
+        setTimeout(function () {
+          printWindow.print();
+        }, 1500); // Timeout to ensure the QR code is rendered before printing
+      }
+
 
 
     });
